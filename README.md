@@ -6,7 +6,7 @@ In this lab, we'll extend our neural networks knowledge further and add one hidd
 
 We'll perform forward propagation, backward propagation, and work with activation functions we haven't used before: the hyperbolic tangent or "tanh" activation function. Let's get started!
 
-## Objectives:
+## Objectives
 
 You will be able to:
 * Generate a random dataset
