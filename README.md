@@ -1,5 +1,5 @@
 
-# Deeper Neural Networks - lab
+# Deeper Neural Networks - Lab
 
 ## Introduction
 In this lab, we'll extend our neural networks knowledge further and add one hidden layer in our neural network. 
