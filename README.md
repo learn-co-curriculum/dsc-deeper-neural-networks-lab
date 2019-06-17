@@ -33,7 +33,7 @@ import sklearn.linear_model
 matplotlib.rcParams['figure.figsize'] = (6.0, 6.0)
 ```
 
-Next, let's generate our data. Scikit-learns enables the creation of simple toy datasets to visualize clustering and classification algorithms. One of them is called `make_circles` and generates a a large circle containing a smaller circle in 2D. `make_circles`-function has several arguments, but here we'll just use 2: `n_samples` and `noise`. We'll create a data set with 500 samples, and insert noise equal to 0.1.
+Next, let's generate our data. Scikit-learns enables the creation of simple toy datasets to visualize clustering and classification algorithms. One of them is called `make_circles` and generates a large circle containing a smaller circle in 2D. `make_circles`-function has several arguments, but here we'll just use 2: `n_samples` and `noise`. We'll create a data set with 500 samples, and insert noise equal to 0.1.
 
 
 ```python
@@ -48,7 +48,7 @@ matplotlib.rcParams['figure.figsize'] = (6.0, 6.0)
 plt.scatter(X[:,0], X[:,1], s=20, c=Y, edgecolors="gray")
 ```
 
-Note that we just generated to "classes": the yellow dots and the purple dots. The goal of this lab is to create a model which can create a so-called "decision boundry" to distinguish the smaller (yellow) circle from the larger (purple) one.
+Note that we just generated to "classes": the yellow dots and the purple dots. The goal of this lab is to create a model which can create a so-called "decision boundary" to distinguish the smaller (yellow) circle from the larger (purple) one.
 
 We'll build a neural network to do this. But first, let's build a logistic regression model and see how that model performs. 
 
@@ -81,7 +81,7 @@ def plot_decision_boundary(pred_func):
     plt.scatter(X[:, 0], X[:, 1],s=20, c=Y ,edgecolors="gray")
 ```
 
-In the helper function, let's create a lambda function inside `plot_decision_boundary` in order to create a decision boundart using the predictions made by the logistic regression model `log_reg`.
+In the helper function, let's create a lambda function inside `plot_decision_boundary` in order to create a decision boundary using the predictions made by the logistic regression model `log_reg`.
 
 
 ```python
@@ -128,7 +128,7 @@ Note that the input layer has 2 inputs, $x_1$ and $x_2$ (which are basically the
 #Your code here; print the shape of X to the console
 ```
 
-Remember that for the neural networks, we want the number of inputs to be rows and the number of cases to be columns. Hence we transpose this matrix.
+Remember that for neural networks, we want the number of inputs to be rows and the number of cases to be columns. Hence we transpose this matrix.
 
 
 ```python
@@ -487,7 +487,7 @@ plt.title("Decision Boundary for neural network with 1 hidden layer")
     Cost after iteration 7000: 0.483635
     Cost after iteration 8000: 0.484555
     Cost after iteration 9000: 0.485062
-
+    
 
 
 
@@ -497,7 +497,7 @@ plt.title("Decision Boundary for neural network with 1 hidden layer")
 
 
 
-![png](index_files/index_66_2.png)
+![png](output_66_2.png)
 
 
 
@@ -514,7 +514,7 @@ print ('The logistic regression model has an accuracy of: '
 ```
 
     The logistic regression model has an accuracy of: 73.4%
-
+    
 
 ## Additional Resources
 
