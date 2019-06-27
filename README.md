@@ -2,539 +2,818 @@
 # Deeper Neural Networks - Lab
 
 ## Introduction
-In this lab, we'll extend our neural networks knowledge further and add one hidden layer in our neural network. 
 
-We'll perform forward propagation, backward propagation, and work with activation functions we haven't used before: the hyperbolic tangent or "tanh" activation function. Let's get started!
+In this lesson, we'll dig deeper into the work horse of deep learning, **_Multi-Layer Perceptrons_**! We'll build and train a couple different MLPs with Keras and explore the tradeoffs that come with adding extra hidden layers. We'll also try switching out some of the activation functions we learned about in the previous lesson to see how they affect training and performance.
 
-## Objectives
+## Getting Started
 
-You will be able to:
-* Generate a random dataset
-* Graph a decision boundary for a 2 variable classifier
-* Create a Neural Net Classifier
-
-## Import packages and generate the data
-
-Let's first start with importing the necessary libraries. We'll use plotting as well as numpy. Additionally, we'll generate our own data using scikit-learn, so we have to use that library as well.
+We'll begin by importing everything we need for this lab. Run the cell below
+to import everything we'll need for this lab.
 
 
 ```python
-# Code provided; just run this cell
-# Package imports
-import matplotlib
-import matplotlib.pyplot as plt
+import pandas as pd
 import numpy as np
-import sklearn
-from sklearn.datasets import make_classification
-import sklearn.linear_model
-
-# Display plots inline and change default figure size
+import matplotlib.pyplot as plt
 %matplotlib inline
-matplotlib.rcParams['figure.figsize'] = (6.0, 6.0)
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+# from keras.datasets import boston_housing, mnist
+from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler, LabelBinarizer
 ```
 
-Next, let's generate our data. Scikit-learns enables the creation of simple toy datasets to visualize clustering and classification algorithms. One of them is called `make_circles` and generates a large circle containing a smaller circle in 2D. `make_circles`-function has several arguments, but here we'll just use 2: `n_samples` and `noise`. We'll create a data set with 500 samples, and insert noise equal to 0.1.
+    Using TensorFlow backend.
+
+
+For this lab, we'll be working with the [Boston Breast Cancer Dataset](https://www.kaggle.com/uciml/breast-cancer-wisconsin-data). Although we're importing this dataset directly from sklearn, the kaggle link above contains a detailed explanation of the dataset, in case you're interested. We recommend taking a minute to familiarize yourself with the dataset before digging in.
+
+In the cell below:
+
+* Call `load_breast_cancer()` to store the dataset object.
+* Get the `.data`, `.target`, and `.feature_names` and store them in the appropriate variables below.
 
 
 ```python
-#Code provided; just run this cell
-# Generate a dataset and plot it
-np.random.seed(123)
-sample_size = 500
-X, Y = sklearn.datasets.make_circles(n_samples = sample_size, noise = 0.1)
-# Display plots inline and change default figure size
-%matplotlib inline
-matplotlib.rcParams['figure.figsize'] = (6.0, 6.0)
-plt.scatter(X[:,0], X[:,1], s=20, c=Y, edgecolors="gray")
+bc_dataset = load_breast_cancer()
+data = bc_dataset.data
+target = bc_dataset.target
+col_names = bc_dataset.feature_names
 ```
 
-Note that we just generated to "classes": the yellow dots and the purple dots. The goal of this lab is to create a model which can create a so-called "decision boundary" to distinguish the smaller (yellow) circle from the larger (purple) one.
+Now, let's create a dataframe so that we can see the data and explore it a bit more easily with the column names attached.
 
-We'll build a neural network to do this. But first, let's build a logistic regression model and see how that model performs. 
-
-## Build a logistic regression model
-
-Use the Scikit-learn function `linear_model.LogisticRegression()` to build a logistic regression model. (This should include initialization and fitting the model to our data.)
+In the cell below, create a pandas dataframe and pass in the `data`. Also pass in the `col_names` to the `columns` parameter when creating the dataframe. Then, print the head of the dataframe.
 
 
 ```python
-#Your code here
+df = pd.DataFrame(data, columns=col_names)
+df.head()
 ```
 
-You'll use this helper function to visualize the classification performance.
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean radius</th>
+      <th>mean texture</th>
+      <th>mean perimeter</th>
+      <th>mean area</th>
+      <th>mean smoothness</th>
+      <th>mean compactness</th>
+      <th>mean concavity</th>
+      <th>mean concave points</th>
+      <th>mean symmetry</th>
+      <th>mean fractal dimension</th>
+      <th>...</th>
+      <th>worst radius</th>
+      <th>worst texture</th>
+      <th>worst perimeter</th>
+      <th>worst area</th>
+      <th>worst smoothness</th>
+      <th>worst compactness</th>
+      <th>worst concavity</th>
+      <th>worst concave points</th>
+      <th>worst symmetry</th>
+      <th>worst fractal dimension</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>17.99</td>
+      <td>10.38</td>
+      <td>122.80</td>
+      <td>1001.0</td>
+      <td>0.11840</td>
+      <td>0.27760</td>
+      <td>0.3001</td>
+      <td>0.14710</td>
+      <td>0.2419</td>
+      <td>0.07871</td>
+      <td>...</td>
+      <td>25.38</td>
+      <td>17.33</td>
+      <td>184.60</td>
+      <td>2019.0</td>
+      <td>0.1622</td>
+      <td>0.6656</td>
+      <td>0.7119</td>
+      <td>0.2654</td>
+      <td>0.4601</td>
+      <td>0.11890</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20.57</td>
+      <td>17.77</td>
+      <td>132.90</td>
+      <td>1326.0</td>
+      <td>0.08474</td>
+      <td>0.07864</td>
+      <td>0.0869</td>
+      <td>0.07017</td>
+      <td>0.1812</td>
+      <td>0.05667</td>
+      <td>...</td>
+      <td>24.99</td>
+      <td>23.41</td>
+      <td>158.80</td>
+      <td>1956.0</td>
+      <td>0.1238</td>
+      <td>0.1866</td>
+      <td>0.2416</td>
+      <td>0.1860</td>
+      <td>0.2750</td>
+      <td>0.08902</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>19.69</td>
+      <td>21.25</td>
+      <td>130.00</td>
+      <td>1203.0</td>
+      <td>0.10960</td>
+      <td>0.15990</td>
+      <td>0.1974</td>
+      <td>0.12790</td>
+      <td>0.2069</td>
+      <td>0.05999</td>
+      <td>...</td>
+      <td>23.57</td>
+      <td>25.53</td>
+      <td>152.50</td>
+      <td>1709.0</td>
+      <td>0.1444</td>
+      <td>0.4245</td>
+      <td>0.4504</td>
+      <td>0.2430</td>
+      <td>0.3613</td>
+      <td>0.08758</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>11.42</td>
+      <td>20.38</td>
+      <td>77.58</td>
+      <td>386.1</td>
+      <td>0.14250</td>
+      <td>0.28390</td>
+      <td>0.2414</td>
+      <td>0.10520</td>
+      <td>0.2597</td>
+      <td>0.09744</td>
+      <td>...</td>
+      <td>14.91</td>
+      <td>26.50</td>
+      <td>98.87</td>
+      <td>567.7</td>
+      <td>0.2098</td>
+      <td>0.8663</td>
+      <td>0.6869</td>
+      <td>0.2575</td>
+      <td>0.6638</td>
+      <td>0.17300</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20.29</td>
+      <td>14.34</td>
+      <td>135.10</td>
+      <td>1297.0</td>
+      <td>0.10030</td>
+      <td>0.13280</td>
+      <td>0.1980</td>
+      <td>0.10430</td>
+      <td>0.1809</td>
+      <td>0.05883</td>
+      <td>...</td>
+      <td>22.54</td>
+      <td>16.67</td>
+      <td>152.20</td>
+      <td>1575.0</td>
+      <td>0.1374</td>
+      <td>0.2050</td>
+      <td>0.4000</td>
+      <td>0.1625</td>
+      <td>0.2364</td>
+      <td>0.07678</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 30 columns</p>
+</div>
+
+
+
+## Getting the Data Ready for Deep Learning
+
+In order to pass this data into a neural network, we'll need to make sure that the data:
+
+* Is purely numerical
+* contains no null values
+* Is normalized
+
+Let's begin by calling the dataframe's `.info()` method to check the datatype of each feature.
 
 
 ```python
-#Code provided; just run this cell
-def plot_decision_boundary(pred_func):
-    # Set min and max values and give it some padding
-    x_min, x_max = X[:, 0].min() - .3, X[:, 0].max() + .3
-    y_min, y_max = X[:, 1].min() - .3, X[:, 1].max() + .3
-    h = 0.005
-    # Generate a grid of points with distance h between them
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-    # Predict the function value for the whole gid
-    Z = pred_func(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
-    # Plot the contour and training examples
-    plt.contourf(xx, yy, Z)
-    plt.scatter(X[:, 0], X[:, 1],s=20, c=Y ,edgecolors="gray")
+df.info()
 ```
 
-In the helper function, let's create a lambda function inside `plot_decision_boundary` in order to create a decision boundary using the predictions made by the logistic regression model `log_reg`.
+    <class 'pandas.core.frame.DataFrame'>
+    RangeIndex: 569 entries, 0 to 568
+    Data columns (total 30 columns):
+    mean radius                569 non-null float64
+    mean texture               569 non-null float64
+    mean perimeter             569 non-null float64
+    mean area                  569 non-null float64
+    mean smoothness            569 non-null float64
+    mean compactness           569 non-null float64
+    mean concavity             569 non-null float64
+    mean concave points        569 non-null float64
+    mean symmetry              569 non-null float64
+    mean fractal dimension     569 non-null float64
+    radius error               569 non-null float64
+    texture error              569 non-null float64
+    perimeter error            569 non-null float64
+    area error                 569 non-null float64
+    smoothness error           569 non-null float64
+    compactness error          569 non-null float64
+    concavity error            569 non-null float64
+    concave points error       569 non-null float64
+    symmetry error             569 non-null float64
+    fractal dimension error    569 non-null float64
+    worst radius               569 non-null float64
+    worst texture              569 non-null float64
+    worst perimeter            569 non-null float64
+    worst area                 569 non-null float64
+    worst smoothness           569 non-null float64
+    worst compactness          569 non-null float64
+    worst concavity            569 non-null float64
+    worst concave points       569 non-null float64
+    worst symmetry             569 non-null float64
+    worst fractal dimension    569 non-null float64
+    dtypes: float64(30)
+    memory usage: 133.4 KB
+
+
+From the output above, we can see that the entire dataset is already in numerical format. We can also see from the counts that each feature has the same number of entries as the number of rows in the dataframe--that means that no feature contains any null values. Great!
+
+Now, let's check to see if our data needs to be normalized. Instead of doing statistical tests here, let's just take a quick look at the head of the dataframe again. Do this in the cell below.
 
 
 ```python
-#Your code here
-#Use the helper function provided to plot the decision boundary of your classifier above.
-```
-
-Now explicitly store the predictions using `X` in `log_reg_predict`, so we can calculate the accuracy.`m
-
-
-```python
-log_reg_predict = #Your code here
-```
-
-
-```python
-#Code provided; just run this cell
-print ('The logistic regression model has an accuracy of: ' 
-       + str(np.sum(log_reg_predict == Y)/sample_size*100) + '%')
-```
-
-**How did this model perform? Is this a surprise? **
-
-## Build a neural network
-
-## Network architecture and data pre-processing
-
-Let's see if a neural network can do better. In what follows, you'll build a neural network with one hidden layer (the hidden layer has 6 units, as follows):
-
-![title](figures/lab_2_graph.png)
-
-Let's reintroduce some of the terminology.
-
-- remember that the input layer passes on $a^{[0]}$ to the next layer, which simply is equal to $x = (x_1, x_2)$. 
-
-- The hidden layer passes on $a^{[1]} = \begin{bmatrix} a^{[1]}_1  \\a^{[1]}_2 \\ a^{[1]}_3 \\ a^{[1]}_4\\ a^{[1]}_5\\ a^{[1]}_6\end{bmatrix}$
-
-- The final layer outputs $a^{[2]}$ which is $\hat y$.
-
-Note that the input layer has 2 inputs, $x_1$ and $x_2$ (which are basically the x- and y-coordinates in the graph with the two circles above). Let's look at the shape of the X-matrix.
-
-
-```python
-#Your code here; print the shape of X to the console
-```
-
-Remember that for neural networks, we want the number of inputs to be rows and the number of cases to be columns. Hence we transpose this matrix.
-
-
-```python
-X_nn = #Your code here; take the transpose of the original matrix
-```
-
-Similarly, for the labels, we like to have a row-matrix.
-
-
-```python
-Y_nn = #Your code here
-```
-
-
-```python
-#Check the shape of your resulting objects
-```
-
-As per the network architecture above, there are two nodes in the input layer, and 1 node in the output layer (with a sigmoid activation). This will create three objects to store the size of each layer: `n_0`, `n_1` and `n_2`. `n_0` (input layer size) and `n_2` (output layer size) are defined by the data, `n_1` is a hyperparameter and can be changed to optimize the result! For this exercise, we've chosen to have 6 nodes in the hidden layer, so let's hardcode the size `n_1` equal to 6. 
-
-
-```python
-n_0 = #Your code here; appropriately define each variable
-n_1 = #Your code here; appropriately define each variable
-n_2 = #Your code here; appropriately define each variable
-```
-
-## Forward propagation
-
-Let's start forward propagating from $a^{[0]}$ to $a^{[1]}$. Recall that this is a function which takes our input layer $a^{[0]}$ and transforms it to the hidden layer $a^{[1]}$.  
-Note that for each sample $x^{(i)}= (x_{1}^{(i)},x_{2}^{(i)})$, we compute $a^{[1] (i)}$:
-First, let's get to $z^{[1] (i)}$ using $W^{[1]}$ and  $b^{[1]}$:
-
-$$z^{[1] (i)} =  W^{[1]} x^{(i)} + b^{[1]}$$ 
-
-Then, we'll use the hyperbolic tangent function as an activation function to get to $a^{[1] (i)}$.
-
-$$a^{[1] (i)} = \tanh(z^{[1] (i)})$$
-
-
-In this example, $W^{[1]}$ is a (6 x 2)-matrix, $b^{[1]}$ is a (6 x 1)-matrix.
-
-In order to get to $a^{[1] (i)}$, we need to initialize this $W^{[1]}$ and $b^{[1]}$. 
-Let's initialize $b^{[1]}$ as a matrix of zeroes, and $W^{[1]}$ as a matrix with random number generated by the standard normal distribution, but then multiplied by 0.05 to make them smaller.
-
-Next, let's go one step further and do the same thing for $W^{[2]}$ and $b^{[2]}$.
-Recall that: 
-$$z^{[2] (i)} =  W^{[2]} a^{[1](i)} + b^{[2]}$$ 
-
-What are the correct dimensions for $W^{[2]}$ and $b^{[2]}$? Use `n_0`, `n_1` and `n_2`, and look at the network graph above to get to the right dimensions!
-
-
-
-```python
-#Code provided; simply run this cell block
-def initialize_parameters(n_0, n_1, n_2):
-    np.random.seed(123) 
-    W1 = np.random.randn(n_1, n_0) * 0.05 
-    b1 = np.zeros((n_1, 1))
-    W2 =  np.random.randn(n_2, n_1) * 0.05 
-    b2 = np.zeros((n_2, 1))
-    
-    parameters = {"W1": W1,
-                  "b1": b1,
-                  "W2": W2,
-                  "b2": b2}
-    
-    return parameters
-```
-
-
-```python
-parameters = #Use the provided function along with your variable presets above to store the parameters here. 
-```
-
-
-```python
-parameters #Simply run this code block; your output should match the results previewed here.
+df.head()
 ```
 
 
 
 
-    {'W1': array([[-0.05428153,  0.04986727],
-            [ 0.01414892, -0.07531474],
-            [-0.02893001,  0.08257183],
-            [-0.12133396, -0.02144563],
-            [ 0.06329681, -0.04333702],
-            [-0.03394431, -0.00473545]]), 'b1': array([[0.],
-            [0.],
-            [0.],
-            [0.],
-            [0.],
-            [0.]]), 'W2': array([[ 0.07456948, -0.0319451 , -0.0221991 , -0.02171756,  0.1102965 ,
-              0.1093393 ]]), 'b2': array([[0.]])}
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean radius</th>
+      <th>mean texture</th>
+      <th>mean perimeter</th>
+      <th>mean area</th>
+      <th>mean smoothness</th>
+      <th>mean compactness</th>
+      <th>mean concavity</th>
+      <th>mean concave points</th>
+      <th>mean symmetry</th>
+      <th>mean fractal dimension</th>
+      <th>...</th>
+      <th>worst radius</th>
+      <th>worst texture</th>
+      <th>worst perimeter</th>
+      <th>worst area</th>
+      <th>worst smoothness</th>
+      <th>worst compactness</th>
+      <th>worst concavity</th>
+      <th>worst concave points</th>
+      <th>worst symmetry</th>
+      <th>worst fractal dimension</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>17.99</td>
+      <td>10.38</td>
+      <td>122.80</td>
+      <td>1001.0</td>
+      <td>0.11840</td>
+      <td>0.27760</td>
+      <td>0.3001</td>
+      <td>0.14710</td>
+      <td>0.2419</td>
+      <td>0.07871</td>
+      <td>...</td>
+      <td>25.38</td>
+      <td>17.33</td>
+      <td>184.60</td>
+      <td>2019.0</td>
+      <td>0.1622</td>
+      <td>0.6656</td>
+      <td>0.7119</td>
+      <td>0.2654</td>
+      <td>0.4601</td>
+      <td>0.11890</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20.57</td>
+      <td>17.77</td>
+      <td>132.90</td>
+      <td>1326.0</td>
+      <td>0.08474</td>
+      <td>0.07864</td>
+      <td>0.0869</td>
+      <td>0.07017</td>
+      <td>0.1812</td>
+      <td>0.05667</td>
+      <td>...</td>
+      <td>24.99</td>
+      <td>23.41</td>
+      <td>158.80</td>
+      <td>1956.0</td>
+      <td>0.1238</td>
+      <td>0.1866</td>
+      <td>0.2416</td>
+      <td>0.1860</td>
+      <td>0.2750</td>
+      <td>0.08902</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>19.69</td>
+      <td>21.25</td>
+      <td>130.00</td>
+      <td>1203.0</td>
+      <td>0.10960</td>
+      <td>0.15990</td>
+      <td>0.1974</td>
+      <td>0.12790</td>
+      <td>0.2069</td>
+      <td>0.05999</td>
+      <td>...</td>
+      <td>23.57</td>
+      <td>25.53</td>
+      <td>152.50</td>
+      <td>1709.0</td>
+      <td>0.1444</td>
+      <td>0.4245</td>
+      <td>0.4504</td>
+      <td>0.2430</td>
+      <td>0.3613</td>
+      <td>0.08758</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>11.42</td>
+      <td>20.38</td>
+      <td>77.58</td>
+      <td>386.1</td>
+      <td>0.14250</td>
+      <td>0.28390</td>
+      <td>0.2414</td>
+      <td>0.10520</td>
+      <td>0.2597</td>
+      <td>0.09744</td>
+      <td>...</td>
+      <td>14.91</td>
+      <td>26.50</td>
+      <td>98.87</td>
+      <td>567.7</td>
+      <td>0.2098</td>
+      <td>0.8663</td>
+      <td>0.6869</td>
+      <td>0.2575</td>
+      <td>0.6638</td>
+      <td>0.17300</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20.29</td>
+      <td>14.34</td>
+      <td>135.10</td>
+      <td>1297.0</td>
+      <td>0.10030</td>
+      <td>0.13280</td>
+      <td>0.1980</td>
+      <td>0.10430</td>
+      <td>0.1809</td>
+      <td>0.05883</td>
+      <td>...</td>
+      <td>22.54</td>
+      <td>16.67</td>
+      <td>152.20</td>
+      <td>1575.0</td>
+      <td>0.1374</td>
+      <td>0.2050</td>
+      <td>0.4000</td>
+      <td>0.1625</td>
+      <td>0.2364</td>
+      <td>0.07678</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 30 columns</p>
+</div>
 
 
 
-Now let's perform the actual forward propagation step to calculate  $z^{[1]}, a^{[1]}, z^{[2]}$ and $a^{[2]}$. You can use the function `np.tanh()` to compute the hyperbolic tangent function. Additionally, remember that $$\hat{y}^{(i)} = a^{[2] (i)} = \sigma(z^{ [2] (i)}).$$
-You can compute the sigmoid as $\sigma(z^{ [2] (i)}) = \displaystyle\frac{1}{1 + \exp(z^{ [2] (i)})}$
+As we can clearly see from comparing features like `mean radius` and `mean area`, columns have different scales, which means that we need to normalize our dataset. To do this, we'll make use of sklearn's `StandardScaler()` object.
 
+In the cell below, use create a StandardScaler object and use it to create a normalized version of our dataset.
 
 
 ```python
-#Finish this partially defined function as noted in the comments below.
-def forward_propagation(X, parameters):
-    W1 = #Your code here; retrieve the appropriate values from the parameters object 
-    b1 = #Your code here; retrieve the appropriate values from the parameters object 
-    W2 = #Your code here; retrieve the appropriate values from the parameters object 
-    b2 = #Your code here; retrieve the appropriate values from the parameters object 
-    
-    Z1 =  #Your code here; write a formula to calculate Z1
-    A1 =  #Your code here; write a formula to calculate A1
-    Z2 =  #Your code here; write a formula to calculate Z2
-    A2 =  #Your code here; write a formula to calculate A2
-        
-    fw_out = {"Z1": Z1,
-              "A1": A1,
-              "Z2": Z2,
-              "A2": A2}
-    
-    return fw_out
+scaler = StandardScaler()
+scaled_data = scaler.fit_transform(data)
 ```
 
+## Binarizing Our Labels
+
+If you took a look at the data dictionary on Kaggle, then you probably noticed the target for this dataset is to predict if the sample is "M" (Malignant) or "B" (Benign). This means that this is a **_Binary Classification_** task, so we'll need to binarize our labels.
+
+In the cell below, make use of sklearn's `LabelBinarizer()` object to create a binarized version of our labels.
+
 
 ```python
-fw_out = #Your code here; call your function above along with our defined parameters.
+binarizer = LabelBinarizer()
+labels = binarizer.fit_transform(target)
 ```
 
-Inspect `Z1`, `A1`, `Z2` and `A2` and make sure that the shape of all the outputs is correct!
+## Building our MLP
+
+Now, we'll build a small **_Multi-Layer Perceptron_** using Keras in the cell below. Our first model will act as a baseline, and then we'll make it bigger to see what happens to model performance.
+
+In the cell below:
+
+* Create our keras model by instantiating a `Sequential()` object.
+* Use the model's `.add()` method to add a `Dense` layer with 10 neurons and a `'tanh'` activation function. Also set the `input_shape` attribute to `(30,)`, since we have 30 features.
+* Since this is a binary classification task, the output layer should be a `Dense` layer with a single neuron, and the activation set to `'sigmoid'`.
 
 
 ```python
-#Your code here; check the shape of Z1
+model_1 = Sequential()
+model_1.add(Dense(5, activation='tanh', input_shape=(30,)))
+model_1.add(Dense(1, activation='sigmoid'))
 ```
 
+### Compiling the Model
+
+Now that we've created the model, we still have to compile it.
+
+In the cell below, compile the model. Set the following hyperparameters:
+
+* `loss='binary_crossentropy'`
+* `optimizer='sgd'`
+* `metrics=['accuracy']`
+
 
 ```python
-#Your code here; check the shape of Z2
+model_1.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
 ```
 
+### Fitting the Model
+
+Now, let's fit the model. In addition to our scaled data and our labels, set the following hyperparameters:
+
+* `epochs=25`
+* `batch_size=1`
+* `validation_split=0.2`
+
 
 ```python
-#Your code here; check the shape of A1
+results_1 = model_1.fit(scaled_data, labels, epochs=25, batch_size=1, validation_split=0.2)
 ```
 
-
-```python
-#Your code here; check the shape of A2
-```
-
-## Compute the cost function
-
-$a^{[2] (i)}$ provides us with the predictions on all the samples, you can then compute the cost $J$ as follows: 
-$$J = - \frac{1}{m} \sum\limits_{i = 0}^{m} \large\left(\small y^{(i)}\log\left(a^{[2] (i)}\right) + (1-y^{(i)})\log\left(1- a^{[2] (i)}\right)  \large  \right) $$
-
-Write a cost function `compute_cost(A2, Y, parameters)` which returns the associated cost using the formula above.
-
-
-```python
-#Complete the skeleton of this function provided as noted in the comments below.
-def compute_cost(A2, Y, parameters):
-    m = np.shape(Y)[1] 
-    
-    #Implement the formula provided above for the cost, J
-    #you may wish to do this in multiple steps to avoid an overly large line of code
-    
-    return cost
-```
-
-
-```python
-#Use your function as defined above to compute the cost given our problem as defined.
-```
-
-
-
-
-    0.6931475711935989
-
-
-
-## Backward propagation
-
-Let's now move backwards again. From what you have seen in the lecture, you can use the following expressions to calculate the derivatives with respect to $z$, $W$, and $b$.
-
-$ dz^{[2]}= a^{[2]} - y $
-
-$ dW^{[2]} = dz^{[2]} a^{[1]T}$
-
-$ db^{[2]} = dz^{[2]} $ 
-
-$ dz^{[1]} =  dW^{[2]T}dz^{[2]} * g'{[1]}(z^{[1]})$
-
-$ dW^{[1]} = dz^{[1]} x^T$
-
-$ db^{[1]} = dz^{[1]}$
-
-
-Recall that $dz^{[1]}$ and $dz^{[2]}$ will be matrices of shape (6, 500) and (1, 500) respectively. $dz^{[1]}$ and  $dz^{[2]}$ however are matrices of size (6, 1) and (1, 1). We'll need to take the averages over the 500 columns in the matrices. You can use python code of the form ```(1/m) * np.sum(dZ1,  axis=1, keepdims=True)```. We need to apply $1/m$ to compute $dW^{[1]}$ and $dW^{[2]}$ as well.
+    Train on 455 samples, validate on 114 samples
+    Epoch 1/25
+    455/455 [==============================] - 5s 11ms/step - loss: 0.3280 - acc: 0.8835 - val_loss: 0.1913 - val_acc: 0.9737
+    Epoch 2/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.1603 - acc: 0.9604 - val_loss: 0.1289 - val_acc: 0.9737
+    Epoch 3/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.1105 - acc: 0.9670 - val_loss: 0.1019 - val_acc: 0.9825
+    Epoch 4/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0916 - acc: 0.9714 - val_loss: 0.0941 - val_acc: 0.9825
+    Epoch 5/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0814 - acc: 0.9736 - val_loss: 0.0943 - val_acc: 0.9561
+    Epoch 6/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0743 - acc: 0.9780 - val_loss: 0.0971 - val_acc: 0.9649
+    Epoch 7/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0710 - acc: 0.9802 - val_loss: 0.0895 - val_acc: 0.9649
+    Epoch 8/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0673 - acc: 0.9802 - val_loss: 0.0856 - val_acc: 0.9561
+    Epoch 9/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0632 - acc: 0.9802 - val_loss: 0.0888 - val_acc: 0.9649
+    Epoch 10/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0627 - acc: 0.9802 - val_loss: 0.0881 - val_acc: 0.9649
+    Epoch 11/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0606 - acc: 0.9780 - val_loss: 0.0785 - val_acc: 0.9737
+    Epoch 12/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0588 - acc: 0.9824 - val_loss: 0.0794 - val_acc: 0.9649
+    Epoch 13/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0569 - acc: 0.9846 - val_loss: 0.0815 - val_acc: 0.9649
+    Epoch 14/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0558 - acc: 0.9802 - val_loss: 0.0727 - val_acc: 0.9737
+    Epoch 15/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0548 - acc: 0.9802 - val_loss: 0.0739 - val_acc: 0.9737
+    Epoch 16/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0538 - acc: 0.9824 - val_loss: 0.0742 - val_acc: 0.9737
+    Epoch 17/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0522 - acc: 0.9846 - val_loss: 0.0735 - val_acc: 0.9737
+    Epoch 18/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0507 - acc: 0.9846 - val_loss: 0.0666 - val_acc: 0.9825
+    Epoch 19/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0508 - acc: 0.9824 - val_loss: 0.0717 - val_acc: 0.9737
+    Epoch 20/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0489 - acc: 0.9846 - val_loss: 0.0672 - val_acc: 0.9825
+    Epoch 21/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0489 - acc: 0.9846 - val_loss: 0.0719 - val_acc: 0.9737
+    Epoch 22/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0474 - acc: 0.9868 - val_loss: 0.0816 - val_acc: 0.9649
+    Epoch 23/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0474 - acc: 0.9846 - val_loss: 0.0712 - val_acc: 0.9737
+    Epoch 24/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0467 - acc: 0.9868 - val_loss: 0.0722 - val_acc: 0.9737
+    Epoch 25/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0449 - acc: 0.9846 - val_loss: 0.0789 - val_acc: 0.9649
 
 
-About $g^{[1]'}(z^{[1]})$: since $g^{[1]}(z^{[1]})$ is the tanh-function, its derivative $g^{[1]'}(z^{[1]})$ is equal to $1-a^2$. You can use `np.power` to compute this.
+Let's quickly plot our validation and accuracy curves and see if we notice anything. Note that when you call a keras model's `.fit()` method, it returns a keras callback containing information on the training process of the model. If you examine the callback's `.history` attribute, you'll find a dictionary containing both the training and validation loss, as well as any metrics we specified when compiling the model (in this case, just accuracy).
 
-
-```python
-def backward_propagation(parameters, fw_out, X, Y):
-    m = X.shape[1]
-
-    W1 = #Your code here; retrieve the appropriate parameter from the parameters variable
-    W2 = #Your code here; retrieve the appropriate parameter from the parameters variable
-
-    A1 = #Your code here; retrieve the appropriate parameter from fw_out
-    A2 = #Your code here; retrieve the appropriate parameter from fw_out
-    
-    dZ2 = #Your code here; use the formula provided above
-    dW2 = (1/m) * np.dot(dZ2, A1.T) #Code provided
-    db2 = (1/m) * np.sum(dZ2,  axis=1, keepdims=True) #Code provided
-    dZ1 = #Your code here; use the formula provided above
-    dW1 = #Mirror the code provided above
-    db1 = #Mirror the code provided above
-    
-    bw_out = {"dW1": dW1,
-              "db1": db1,
-              "dW2": dW2,
-              "db2": db2}
-    
-    return bw_out
-```
+In the cell below, let's quickly create a function for visualizing the loss and accuracy metrics. Since we'll want to do this anytime we train an MLP, its worth wrapping this code in a function so that we can easily reuse it.
 
 
 ```python
-bw_out = #Use your function above to create the bw_out variable
-```
+def visualize_training_results(results):
+    history = results.history
+    plt.figure()
+    plt.plot(history['val_loss'])
+    plt.plot(history['loss'])
+    plt.legend(['val_loss', 'loss'])
+    plt.title('Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.show()
 
-## Update the parameters
-
-To update the parameters, let's go back and use the outputs of the parameter initialization and the backward propagation.
-
-
-```python
-def update_parameters(parameters, bw_out, alpha = 0.7):
-
-    W1 = parameters["W1"]
-    b1 = parameters["b1"]
-    W2 = parameters["W2"]
-    b2 = parameters["b2"]
-
-    dW1 = bw_out["dW1"]
-    db1 = bw_out["db1"]
-    dW2 = bw_out["dW2"]
-    db2 = bw_out["db2"]
-    
-    W1 = #Your code here; update the values for each variable
-    b1 = #Your code here; update the values for each variable
-    W2 = #Your code here; update the values for each variable
-    b2 = #Your code here; update the values for each variable
-    
-    parameters = {"W1": W1,
-                  "b1": b1,
-                  "W2": W2,
-                  "b2": b2}
-    
-    return parameters
-```
-
-
-```python
-update_parameters(parameters,bw_out) #Simply run this block of code. Output should match the results previewed below.
-```
-
-
-
-
-    {'W1': array([[-0.05434644,  0.04968642],
-            [ 0.01417661, -0.07523762],
-            [-0.02891073,  0.08262535],
-            [-0.12131568, -0.02139336],
-            [ 0.06320089, -0.04360462],
-            [-0.03403915, -0.00500133]]), 'b1': array([[ 1.32898104e-05],
-            [-6.19218875e-06],
-            [-5.56636572e-06],
-            [-1.09271502e-05],
-            [ 2.13065980e-05],
-            [ 4.48639481e-06]]), 'W2': array([[ 0.07449547, -0.03177459, -0.02237429, -0.0215612 ,  0.11034683,
-              0.10938032]]), 'b2': array([[1.82562182e-06]])}
-
-
-
-
-```python
-#Now its time to put it all together to build our full neural network! Complete the templated function below.
-def nn_model(X, Y, n_1, num_iter = 10000, print_cost=False):
-    np.random.seed(3)
-    n_x = np.shape(X)[0] 
-    n_y = np.shape(Y)[0] 
-
-    parameters = #Your code here; use our previous function above to set parameters.
-    W1 = parameters["W1"]
-    b1 = parameters["b1"]
-    W2 = parameters["W2"]
-    b2 = parameters["b2"]    
-
-    for i in range(0, num_iter):
-         
-        # Forward propagation. Inputs: "X, parameters". Outputs: "fw_out".
-        fw_out = #Your code here
-        
-        # We'll need A2 from fw_out to add it in the cost function
-        A2 = fw_out["A2"]
-        
-        # Use the cost function with inputs: "A2", "Y", "parameters".
-        cost = #Your code here
- 
-        # Use the backward propagation function with inputs: "parameters", "fw_out", "X", "Y".
-        bw_out = #Your code here
- 
-        # Parameter update with gradient descent. Inputs: "parameters" and"bw_out".
-        parameters = #Your code here
-                
-        # Print the cost every 1000 iterations
-        if print_cost and i % 1000 == 0:
-            print ("Cost after iteration %i: %f" %(i, cost))
-
-    return parameters
+    plt.figure()
+    plt.plot(history['val_acc'])
+    plt.plot(history['acc'])
+    plt.legend(['val_acc', 'acc'])
+    plt.title('Accuracy')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.show()
 ```
 
 
 ```python
-#Code provided; review for understanding but no editing needed!
-def predict(parameters, X):
-    fw_out = forward_propagation(X, parameters)
-    A2 = fw_out["A2"]
+visualize_training_results(results_1)
+```
 
-    predictions = A2 > 0.5
-    return predictions
+
+![png](index_files/output_22_0.png)
+
+
+
+![png](index_files/output_22_1.png)
+
+
+## Detecting Overfitting
+
+You'll probably notice that the model did pretty well! It's always recommended to visualize your training and validation metrics against each other after training a model. By plotting them like this, we can easily detect that the model is starting to overfit. We can tell that this is happening by seeing the model's training performance steadily improve long after the validation performance plateaus. We can see that in the plots above as the training loss continues to decrease and the training accuracy continues to increase, and the distance between the two lines gets greater as the epochs gets higher.
+
+## Iterating on the Model
+
+By adding another hidden layer, we can agiven the model the ability to capture high layers of abstraction in th data. However, increasing the depth of the model also increases the amount of data the model needs to converge to answer, because with a more complex model comes the "Curse of Dimensionality", thanks to all the extra trainable parameters that come from adding more size to our network.
+
+If there is complexity in the data that our smaller model was not big enough to catch, then a larger model may improve performance. However, if our dataset isn't big enough for the new, larger model, then we may see performance decrease as then model "thrashes" about a bit, failing to converge. Let's try and see what happens.
+
+In the cell below, recreate the model that you created above, with one exception. In the model below, add a second `Dense` layer with `'tanh'` activation functions and `5` neurons after the first. The network's output layer should still be a `Dense` layer with a single neuron and a sigmoid activation function, since this is still a binary classification task.
+
+Create, compile, and fit the model in the cells below, and then visualize the results to compare the history.
+
+
+```python
+model_2 = Sequential()
+model_2.add(Dense(10, activation='tanh', input_shape=(30,)))
+model_2.add(Dense(5, activation='tanh'))
+model_2.add(Dense(1, activation='sigmoid'))
 ```
 
 
 ```python
-#Code provided; review for understanding but no editing needed!
-parameters = nn_model(X_nn, Y_nn, n_1 = 6, num_iter = 10000, print_cost = True)
-
-# Plot the decision boundary
-plot_decision_boundary(lambda X: predict(parameters, X.T)) 
-plt.title("Decision Boundary for neural network with 1 hidden layer")
-```
-
-    Cost after iteration 0: 0.693148
-    Cost after iteration 1000: 0.693075
-    Cost after iteration 2000: 0.692952
-    Cost after iteration 3000: 0.507182
-    Cost after iteration 4000: 0.479930
-    Cost after iteration 5000: 0.481106
-    Cost after iteration 6000: 0.481934
-    Cost after iteration 7000: 0.483635
-    Cost after iteration 8000: 0.484555
-    Cost after iteration 9000: 0.485062
-    
-
-
-
-
-    Text(0.5,1,'Decision Boundary for neural network with 1 hidden layer')
-
-
-
-
-![png](output_66_2.png)
-
-
-
-```python
-#Code provided; review for understanding but no editing needed!
-nn_predict = predict(parameters, X.T)
+model_2.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
 ```
 
 
 ```python
-#Code provided; review for understanding but no editing needed!
-print ('The logistic regression model has an accuracy of: ' 
-       + str(np.sum(nn_predict == Y)/sample_size*100) + '%')
+results_2 = model_2.fit(scaled_data, labels, epochs=25, batch_size=1, validation_split=0.2)
 ```
 
-    The logistic regression model has an accuracy of: 73.4%
-    
+    Train on 455 samples, validate on 114 samples
+    Epoch 1/25
+    455/455 [==============================] - 2s 3ms/step - loss: 0.2039 - acc: 0.9385 - val_loss: 0.1316 - val_acc: 0.9649
+    Epoch 2/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.1032 - acc: 0.9714 - val_loss: 0.1144 - val_acc: 0.9649
+    Epoch 3/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0823 - acc: 0.9780 - val_loss: 0.1145 - val_acc: 0.9649
+    Epoch 4/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0735 - acc: 0.9758 - val_loss: 0.0967 - val_acc: 0.9649
+    Epoch 5/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0663 - acc: 0.9780 - val_loss: 0.1172 - val_acc: 0.9561
+    Epoch 6/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0641 - acc: 0.9758 - val_loss: 0.1131 - val_acc: 0.9561
+    Epoch 7/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0602 - acc: 0.9780 - val_loss: 0.0908 - val_acc: 0.9561
+    Epoch 8/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0562 - acc: 0.9802 - val_loss: 0.0967 - val_acc: 0.9561
+    Epoch 9/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0540 - acc: 0.9802 - val_loss: 0.1119 - val_acc: 0.9561
+    Epoch 10/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0519 - acc: 0.9846 - val_loss: 0.0869 - val_acc: 0.9649
+    Epoch 11/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0482 - acc: 0.9868 - val_loss: 0.0896 - val_acc: 0.9649
+    Epoch 12/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0450 - acc: 0.9868 - val_loss: 0.0912 - val_acc: 0.9649
+    Epoch 13/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0457 - acc: 0.9890 - val_loss: 0.1078 - val_acc: 0.9649
+    Epoch 14/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0443 - acc: 0.9846 - val_loss: 0.0935 - val_acc: 0.9737
+    Epoch 15/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0450 - acc: 0.9868 - val_loss: 0.0948 - val_acc: 0.9649
+    Epoch 16/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0445 - acc: 0.9868 - val_loss: 0.1113 - val_acc: 0.9649
+    Epoch 17/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0409 - acc: 0.9912 - val_loss: 0.1378 - val_acc: 0.9561
+    Epoch 18/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0401 - acc: 0.9912 - val_loss: 0.0904 - val_acc: 0.9649
+    Epoch 19/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0388 - acc: 0.9890 - val_loss: 0.1404 - val_acc: 0.9649
+    Epoch 20/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0359 - acc: 0.9890 - val_loss: 0.0696 - val_acc: 0.9649
+    Epoch 21/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0385 - acc: 0.9890 - val_loss: 0.0846 - val_acc: 0.9649
+    Epoch 22/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0374 - acc: 0.9890 - val_loss: 0.1010 - val_acc: 0.9649
+    Epoch 23/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0358 - acc: 0.9890 - val_loss: 0.0878 - val_acc: 0.9561
+    Epoch 24/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0321 - acc: 0.9912 - val_loss: 0.1513 - val_acc: 0.9561
+    Epoch 25/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.0324 - acc: 0.9890 - val_loss: 0.1006 - val_acc: 0.9649
 
-## Additional Resources
 
-This example should be another helpful introduction to building neural networks. For more information about introductory neural networks, see some of the resources below.
 
-https://github.com/dennybritz/nn-from-scratch/blob/master/nn-from-scratch.ipynb --> helper function
+```python
+visualize_training_results(results_2)
+```
 
-http://www.wildml.com/2015/09/implementing-a-neural-network-from-scratch/
 
-https://beckernick.github.io/neural-network-scratch/
+![png](index_files/output_27_0.png)
 
-http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_circles.html
 
-## Summary 
 
-Congratulations! You just coded a neural network!
+![png](index_files/output_27_1.png)
 
-You learned how to create a "deeper" (yet shallow) neural network, with tanh activation functions in the hidden layer. You noticed how you can notably improve results compared to a logistic regression model! Hopefully, this illustrates well why neural networks are so useful. 
 
-Things you can do from here:
-- Increase/decrease the number of nodes in the hidden layer
-- Change learning rate alpha.
-- Change the noise parameter in your data set.
+## What Happened?
+
+Although the final validation score for both models is the same, this model is clearly worse because it hasn't converged yet. We can tell because of the greater variance in the movement of the `val_loss` and `val_acc` lines. This suggests that we can remedy this in 1 of 2 ways:
+
+* Decrease the size of the network, OR
+* Increase the size of our training data.
+
+## Visualizing Why we Normalize Our Data
+
+As a final exercise, let's create a 3rd model that is the same as the first model we created for this exercise in every way. The only difference is that we will train it on our raw dataset, not the normalized version. This way, we can see how much of a difference normalizing our input data makes.
+
+Create, compile, and fit a model in the cell below. The only change in parameters will be using `data` instead of `scaled_data` during the `.fit()` step.
+
+
+```python
+model_3 = Sequential()
+model_3.add(Dense(5, activation='tanh', input_shape=(30,)))
+model_3.add(Dense(1, activation='sigmoid'))
+```
+
+
+```python
+model_3.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
+```
+
+
+```python
+results_3 = model_3.fit(data, labels, epochs=25, batch_size=1, validation_split=0.2)
+```
+
+    Train on 455 samples, validate on 114 samples
+    Epoch 1/25
+    455/455 [==============================] - 1s 3ms/step - loss: 1.2957 - acc: 0.4769 - val_loss: 0.6003 - val_acc: 0.7719
+    Epoch 2/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6020 - val_acc: 0.7719
+    Epoch 3/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6783 - acc: 0.5868 - val_loss: 0.5920 - val_acc: 0.7719
+    Epoch 4/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6800 - acc: 0.5868 - val_loss: 0.6279 - val_acc: 0.7719
+    Epoch 5/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6803 - acc: 0.5912 - val_loss: 0.6573 - val_acc: 0.7719
+    Epoch 6/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6822 - acc: 0.5912 - val_loss: 0.6198 - val_acc: 0.7719
+    Epoch 7/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6822 - acc: 0.5912 - val_loss: 0.6324 - val_acc: 0.7719
+    Epoch 8/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6818 - acc: 0.5824 - val_loss: 0.6062 - val_acc: 0.7719
+    Epoch 9/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6183 - val_acc: 0.7719
+    Epoch 10/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6808 - acc: 0.5912 - val_loss: 0.6209 - val_acc: 0.7719
+    Epoch 11/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6819 - acc: 0.5912 - val_loss: 0.6094 - val_acc: 0.7719
+    Epoch 12/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6809 - acc: 0.5868 - val_loss: 0.6151 - val_acc: 0.7719
+    Epoch 13/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6813 - acc: 0.5912 - val_loss: 0.5801 - val_acc: 0.7719
+    Epoch 14/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6808 - acc: 0.5912 - val_loss: 0.6598 - val_acc: 0.7719
+    Epoch 15/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6808 - acc: 0.5780 - val_loss: 0.5975 - val_acc: 0.7719
+    Epoch 16/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6800 - acc: 0.5868 - val_loss: 0.5805 - val_acc: 0.7719
+    Epoch 17/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6814 - acc: 0.5912 - val_loss: 0.6188 - val_acc: 0.7719
+    Epoch 18/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6776 - acc: 0.5912 - val_loss: 0.6993 - val_acc: 0.2281
+    Epoch 19/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6832 - acc: 0.5780 - val_loss: 0.6348 - val_acc: 0.7719
+    Epoch 20/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6791 - acc: 0.5670 - val_loss: 0.5936 - val_acc: 0.7719
+    Epoch 21/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6801 - acc: 0.5912 - val_loss: 0.6192 - val_acc: 0.7719
+    Epoch 22/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6822 - acc: 0.5912 - val_loss: 0.6238 - val_acc: 0.7719
+    Epoch 23/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6813 - acc: 0.5912 - val_loss: 0.5817 - val_acc: 0.7719
+    Epoch 24/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6828 - acc: 0.5912 - val_loss: 0.6002 - val_acc: 0.7719
+    Epoch 25/25
+    455/455 [==============================] - 1s 3ms/step - loss: 0.6798 - acc: 0.5802 - val_loss: 0.5994 - val_acc: 0.7719
+
+
+
+```python
+visualize_training_results(results_3)
+```
+
+
+![png](index_files/output_32_0.png)
+
+
+
+![png](index_files/output_32_1.png)
+
+
+Wow! Our results were much worse--over 20% poorer performance when working with non-normalized input data!  
+
+
+## Summary
+
+In this lab, we got some practice creating **_Multi-Layer Perceptrons_**, and explored how things like the number of layers in a model and data normalization affect our overall training results!
