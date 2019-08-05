@@ -577,7 +577,7 @@ results_1 = model_1.fit(scaled_data, labels, epochs=25, batch_size=1, validation
     455/455 [==============================] - 1s 3ms/step - loss: 0.0449 - acc: 0.9846 - val_loss: 0.0789 - val_acc: 0.9649
 
 
-Let's quickly plot our validation and accuracy curves and see if we notice anything. Note that when you call a keras model's `.fit()` method, it returns a keras callback containing information on the training process of the model. If you examine the callback's `.history` attribute, you'll find a dictionary containing both the training and validation loss, as well as any metrics we specified when compiling the model (in this case, just accuracy). 
+Let's quickly plot our validation and accuracy curves and see if we notice anything. Note that when you call a Keras model's `.fit()` method, it returns a Keras callback containing information on the training process of the model. If you examine the callback's `.history` attribute, you'll find a dictionary containing both the training and validation loss, as well as any metrics we specified when compiling the model (in this case, just accuracy). 
 
 In the cell below, let's quickly create a function for visualizing the loss and accuracy metrics. Since we'll want to do this anytime we train an MLP, its worth wrapping this code in a function so that we can easily reuse it. 
 
@@ -623,7 +623,7 @@ You'll probably notice that the model did pretty well! It's always recommended t
 
 ## Iterating on the Model
 
-By adding another hidden layer, we can agiven the model the ability to capture high layers of abstraction in th data. However, increasing the depth of the model also increases the amount of data the model needs to converge to answer, because with a more complex model comes the "Curse of Dimensionality", thanks to all the extra trainable parameters that come from adding more size to our network. 
+By adding another hidden layer, we can a given the model the ability to capture high layers of abstraction in th data. However, increasing the depth of the model also increases the amount of data the model needs to converge to answer, because with a more complex model comes the "Curse of Dimensionality", thanks to all the extra trainable parameters that come from adding more size to our network. 
 
 If there is complexity in the data that our smaller model was not big enough to catch, then a larger model may improve performance. However, if our dataset isn't big enough for the new, larger model, then we may see performance decrease as then model "thrashes" about a bit, failing to converge. Let's try and see what happens. 
 
