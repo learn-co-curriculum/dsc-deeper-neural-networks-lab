@@ -59,9 +59,19 @@ In order to pass this data into a neural network, we'll need to make sure that t
 
 Let's begin by calling the dataframe's `.info()` method to check the datatype of each feature. 
 
+
+```python
+
+```
+
 From the output above, we can see that the entire dataset is already in numerical format. We can also see from the counts that each feature has the same number of entries as the number of rows in the dataframe--that means that no feature contains any null values. Great!
 
 Now, let's check to see if our data needs to be normalized. Instead of doing statistical tests here, let's just take a quick look at the head of the dataframe again. Do this in the cell below. 
+
+
+```python
+
+```
 
 As we can clearly see from comparing features like `mean radius` and `mean area`, columns have different scales, which means that we need to normalize our dataset. To do this, we'll make use of sklearn's `StandardScaler()` object. 
 
@@ -110,6 +120,11 @@ In the cell below, compile the model. Set the following hyperparameters:
 * `loss='binary_crossentropy'`
 * `optimizer='sgd'`
 * `metrics=['accuracy']`
+
+
+```python
+
+```
 
 ### Fitting the Model
 
@@ -178,6 +193,11 @@ model_2 = None
 
 
 ```python
+
+```
+
+
+```python
 results_2 = None
 ```
 
@@ -202,6 +222,11 @@ Create, compile, and fit a model in the cell below. The only change in parameter
 
 ```python
 model_3 = None
+
+```
+
+
+```python
 
 ```
 
