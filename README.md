@@ -8,7 +8,7 @@ In this lesson, we'll dig deeper into the work horse of deep learning, **_Multi-
 
 ## Objectives
 
-- Build a deep neural network from scratch 
+- Build a deep neural network using Keras 
 
 
 ## Getting Started
