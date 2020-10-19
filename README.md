@@ -1,4 +1,3 @@
-
 # Deeper Neural Networks - Lab
 
 ## Introduction
@@ -124,7 +123,7 @@ In the cell below, compile the model. Set the following hyperparameters:
 
 * `loss='binary_crossentropy'`
 * `optimizer='sgd'`
-* `metrics=['accuracy']`
+* `metrics=['acc']`
 
 
 ```python
