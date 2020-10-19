@@ -1,4 +1,3 @@
-
 # Deeper Neural Networks - Lab
 
 ## Introduction
@@ -41,9 +40,6 @@ from keras.layers import Dense
 from sklearn.datasets import load_breast_cancer
 from sklearn.preprocessing import StandardScaler, LabelBinarizer
 ```
-
-    Using TensorFlow backend.
-
 
 For this lab, we'll be working with the [Boston Breast Cancer Dataset](https://www.kaggle.com/uciml/breast-cancer-wisconsin-data). Although we're importing this dataset directly from scikit-learn, the Kaggle link above contains a detailed explanation of the dataset, in case you're interested. We recommend you take a minute to familiarize yourself with the dataset before digging in. 
 
@@ -283,38 +279,40 @@ df.info()
     <class 'pandas.core.frame.DataFrame'>
     RangeIndex: 569 entries, 0 to 568
     Data columns (total 30 columns):
-    mean radius                569 non-null float64
-    mean texture               569 non-null float64
-    mean perimeter             569 non-null float64
-    mean area                  569 non-null float64
-    mean smoothness            569 non-null float64
-    mean compactness           569 non-null float64
-    mean concavity             569 non-null float64
-    mean concave points        569 non-null float64
-    mean symmetry              569 non-null float64
-    mean fractal dimension     569 non-null float64
-    radius error               569 non-null float64
-    texture error              569 non-null float64
-    perimeter error            569 non-null float64
-    area error                 569 non-null float64
-    smoothness error           569 non-null float64
-    compactness error          569 non-null float64
-    concavity error            569 non-null float64
-    concave points error       569 non-null float64
-    symmetry error             569 non-null float64
-    fractal dimension error    569 non-null float64
-    worst radius               569 non-null float64
-    worst texture              569 non-null float64
-    worst perimeter            569 non-null float64
-    worst area                 569 non-null float64
-    worst smoothness           569 non-null float64
-    worst compactness          569 non-null float64
-    worst concavity            569 non-null float64
-    worst concave points       569 non-null float64
-    worst symmetry             569 non-null float64
-    worst fractal dimension    569 non-null float64
+     #   Column                   Non-Null Count  Dtype  
+    ---  ------                   --------------  -----  
+     0   mean radius              569 non-null    float64
+     1   mean texture             569 non-null    float64
+     2   mean perimeter           569 non-null    float64
+     3   mean area                569 non-null    float64
+     4   mean smoothness          569 non-null    float64
+     5   mean compactness         569 non-null    float64
+     6   mean concavity           569 non-null    float64
+     7   mean concave points      569 non-null    float64
+     8   mean symmetry            569 non-null    float64
+     9   mean fractal dimension   569 non-null    float64
+     10  radius error             569 non-null    float64
+     11  texture error            569 non-null    float64
+     12  perimeter error          569 non-null    float64
+     13  area error               569 non-null    float64
+     14  smoothness error         569 non-null    float64
+     15  compactness error        569 non-null    float64
+     16  concavity error          569 non-null    float64
+     17  concave points error     569 non-null    float64
+     18  symmetry error           569 non-null    float64
+     19  fractal dimension error  569 non-null    float64
+     20  worst radius             569 non-null    float64
+     21  worst texture            569 non-null    float64
+     22  worst perimeter          569 non-null    float64
+     23  worst area               569 non-null    float64
+     24  worst smoothness         569 non-null    float64
+     25  worst compactness        569 non-null    float64
+     26  worst concavity          569 non-null    float64
+     27  worst concave points     569 non-null    float64
+     28  worst symmetry           569 non-null    float64
+     29  worst fractal dimension  569 non-null    float64
     dtypes: float64(30)
-    memory usage: 133.4 KB
+    memory usage: 133.5 KB
 
 
 From the output above, we can see that the entire dataset is already in numerical format. We can also see from the counts that each feature has the same number of entries as the number of rows in the DataFrame -- that means that no feature contains any missing values. Great!
@@ -572,7 +570,7 @@ In the cell below, compile the model. Set the following hyperparameters:
 
 * `loss='binary_crossentropy'`
 * `optimizer='sgd'`
-* `metrics=['accuracy']`
+* `metrics=['acc']`
 
 
 ```python
@@ -582,7 +580,7 @@ In the cell below, compile the model. Set the following hyperparameters:
 
 ```python
 # __SOLUTION__ 
-model_1.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
+model_1.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['acc'])
 ```
 
 ### Fitting the Model
@@ -604,57 +602,56 @@ results_1 = None
 results_1 = model_1.fit(scaled_data, labels, epochs=25, batch_size=1, validation_split=0.2)
 ```
 
-    Train on 455 samples, validate on 114 samples
     Epoch 1/25
-    455/455 [==============================] - 5s 11ms/step - loss: 0.3280 - acc: 0.8835 - val_loss: 0.1913 - val_acc: 0.9737
+    455/455 [==============================] - 0s 661us/step - loss: 0.2576 - acc: 0.9275 - val_loss: 0.2038 - val_acc: 0.9298
     Epoch 2/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.1603 - acc: 0.9604 - val_loss: 0.1289 - val_acc: 0.9737
+    455/455 [==============================] - 0s 459us/step - loss: 0.1198 - acc: 0.9692 - val_loss: 0.1543 - val_acc: 0.9298
     Epoch 3/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.1105 - acc: 0.9670 - val_loss: 0.1019 - val_acc: 0.9825
+    455/455 [==============================] - 0s 438us/step - loss: 0.0925 - acc: 0.9692 - val_loss: 0.1336 - val_acc: 0.9386
     Epoch 4/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0916 - acc: 0.9714 - val_loss: 0.0941 - val_acc: 0.9825
+    455/455 [==============================] - 0s 436us/step - loss: 0.0811 - acc: 0.9758 - val_loss: 0.1254 - val_acc: 0.9386
     Epoch 5/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0814 - acc: 0.9736 - val_loss: 0.0943 - val_acc: 0.9561
+    455/455 [==============================] - 0s 429us/step - loss: 0.0739 - acc: 0.9758 - val_loss: 0.1128 - val_acc: 0.9561
     Epoch 6/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0743 - acc: 0.9780 - val_loss: 0.0971 - val_acc: 0.9649
+    455/455 [==============================] - 0s 430us/step - loss: 0.0698 - acc: 0.9780 - val_loss: 0.1128 - val_acc: 0.9561
     Epoch 7/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0710 - acc: 0.9802 - val_loss: 0.0895 - val_acc: 0.9649
+    455/455 [==============================] - 0s 431us/step - loss: 0.0664 - acc: 0.9780 - val_loss: 0.1118 - val_acc: 0.9561
     Epoch 8/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0673 - acc: 0.9802 - val_loss: 0.0856 - val_acc: 0.9561
+    455/455 [==============================] - 0s 443us/step - loss: 0.0635 - acc: 0.9758 - val_loss: 0.1032 - val_acc: 0.9649
     Epoch 9/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0632 - acc: 0.9802 - val_loss: 0.0888 - val_acc: 0.9649
+    455/455 [==============================] - 0s 439us/step - loss: 0.0618 - acc: 0.9802 - val_loss: 0.1032 - val_acc: 0.9561
     Epoch 10/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0627 - acc: 0.9802 - val_loss: 0.0881 - val_acc: 0.9649
+    455/455 [==============================] - 0s 436us/step - loss: 0.0598 - acc: 0.9780 - val_loss: 0.0976 - val_acc: 0.9649
     Epoch 11/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0606 - acc: 0.9780 - val_loss: 0.0785 - val_acc: 0.9737
+    455/455 [==============================] - 0s 428us/step - loss: 0.0583 - acc: 0.9780 - val_loss: 0.0988 - val_acc: 0.9561
     Epoch 12/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0588 - acc: 0.9824 - val_loss: 0.0794 - val_acc: 0.9649
+    455/455 [==============================] - 0s 429us/step - loss: 0.0567 - acc: 0.9802 - val_loss: 0.1027 - val_acc: 0.9561
     Epoch 13/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0569 - acc: 0.9846 - val_loss: 0.0815 - val_acc: 0.9649
+    455/455 [==============================] - 0s 414us/step - loss: 0.0554 - acc: 0.9802 - val_loss: 0.1018 - val_acc: 0.9561
     Epoch 14/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0558 - acc: 0.9802 - val_loss: 0.0727 - val_acc: 0.9737
+    455/455 [==============================] - 0s 425us/step - loss: 0.0537 - acc: 0.9824 - val_loss: 0.0952 - val_acc: 0.9649
     Epoch 15/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0548 - acc: 0.9802 - val_loss: 0.0739 - val_acc: 0.9737
+    455/455 [==============================] - 0s 430us/step - loss: 0.0525 - acc: 0.9824 - val_loss: 0.0947 - val_acc: 0.9649
     Epoch 16/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0538 - acc: 0.9824 - val_loss: 0.0742 - val_acc: 0.9737
+    455/455 [==============================] - 0s 428us/step - loss: 0.0515 - acc: 0.9802 - val_loss: 0.0955 - val_acc: 0.9649
     Epoch 17/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0522 - acc: 0.9846 - val_loss: 0.0735 - val_acc: 0.9737
+    455/455 [==============================] - 0s 414us/step - loss: 0.0499 - acc: 0.9802 - val_loss: 0.1032 - val_acc: 0.9561
     Epoch 18/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0507 - acc: 0.9846 - val_loss: 0.0666 - val_acc: 0.9825
+    455/455 [==============================] - 0s 428us/step - loss: 0.0487 - acc: 0.9802 - val_loss: 0.0979 - val_acc: 0.9649
     Epoch 19/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0508 - acc: 0.9824 - val_loss: 0.0717 - val_acc: 0.9737
+    455/455 [==============================] - 0s 441us/step - loss: 0.0469 - acc: 0.9824 - val_loss: 0.0928 - val_acc: 0.9737
     Epoch 20/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0489 - acc: 0.9846 - val_loss: 0.0672 - val_acc: 0.9825
+    455/455 [==============================] - 0s 414us/step - loss: 0.0471 - acc: 0.9802 - val_loss: 0.0964 - val_acc: 0.9649
     Epoch 21/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0489 - acc: 0.9846 - val_loss: 0.0719 - val_acc: 0.9737
+    455/455 [==============================] - 0s 434us/step - loss: 0.0455 - acc: 0.9802 - val_loss: 0.0943 - val_acc: 0.9649
     Epoch 22/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0474 - acc: 0.9868 - val_loss: 0.0816 - val_acc: 0.9649
+    455/455 [==============================] - 0s 439us/step - loss: 0.0453 - acc: 0.9846 - val_loss: 0.0964 - val_acc: 0.9649
     Epoch 23/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0474 - acc: 0.9846 - val_loss: 0.0712 - val_acc: 0.9737
+    455/455 [==============================] - 0s 432us/step - loss: 0.0440 - acc: 0.9846 - val_loss: 0.0948 - val_acc: 0.9561
     Epoch 24/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0467 - acc: 0.9868 - val_loss: 0.0722 - val_acc: 0.9737
+    455/455 [==============================] - 0s 430us/step - loss: 0.0432 - acc: 0.9846 - val_loss: 0.0948 - val_acc: 0.9561
     Epoch 25/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0449 - acc: 0.9846 - val_loss: 0.0789 - val_acc: 0.9649
+    455/455 [==============================] - 0s 428us/step - loss: 0.0427 - acc: 0.9868 - val_loss: 0.1025 - val_acc: 0.9561
 
 
 Note that when you call a Keras model's `.fit()` method, it returns a Keras callback containing information on the training process of the model. If you examine the callback's `.history` attribute, you'll find a dictionary containing both the training and validation loss, as well as any metrics we specified when compiling the model (in this case, just accuracy). 
@@ -722,11 +719,15 @@ visualize_training_results(results_1)
 ```
 
 
+    
 ![png](index_files/index_34_0.png)
+    
 
 
 
+    
 ![png](index_files/index_34_1.png)
+    
 
 
 ## Detecting Overfitting
@@ -766,7 +767,7 @@ model_2.add(Dense(1, activation='sigmoid'))
 
 ```python
 # __SOLUTION__ 
-model_2.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
+model_2.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['acc'])
 ```
 
 
@@ -780,57 +781,56 @@ results_2 = None
 results_2 = model_2.fit(scaled_data, labels, epochs=25, batch_size=1, validation_split=0.2)
 ```
 
-    Train on 455 samples, validate on 114 samples
     Epoch 1/25
-    455/455 [==============================] - 2s 3ms/step - loss: 0.2039 - acc: 0.9385 - val_loss: 0.1316 - val_acc: 0.9649
+    455/455 [==============================] - 0s 616us/step - loss: 0.2577 - acc: 0.9275 - val_loss: 0.1680 - val_acc: 0.9561
     Epoch 2/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.1032 - acc: 0.9714 - val_loss: 0.1144 - val_acc: 0.9649
+    455/455 [==============================] - 0s 453us/step - loss: 0.1120 - acc: 0.9758 - val_loss: 0.1281 - val_acc: 0.9737
     Epoch 3/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0823 - acc: 0.9780 - val_loss: 0.1145 - val_acc: 0.9649
+    455/455 [==============================] - 0s 460us/step - loss: 0.0854 - acc: 0.9824 - val_loss: 0.1113 - val_acc: 0.9649
     Epoch 4/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0735 - acc: 0.9758 - val_loss: 0.0967 - val_acc: 0.9649
+    455/455 [==============================] - 0s 451us/step - loss: 0.0760 - acc: 0.9780 - val_loss: 0.0990 - val_acc: 0.9737
     Epoch 5/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0663 - acc: 0.9780 - val_loss: 0.1172 - val_acc: 0.9561
+    455/455 [==============================] - 0s 449us/step - loss: 0.0688 - acc: 0.9824 - val_loss: 0.1006 - val_acc: 0.9737
     Epoch 6/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0641 - acc: 0.9758 - val_loss: 0.1131 - val_acc: 0.9561
+    455/455 [==============================] - 0s 452us/step - loss: 0.0651 - acc: 0.9802 - val_loss: 0.0909 - val_acc: 0.9737
     Epoch 7/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0602 - acc: 0.9780 - val_loss: 0.0908 - val_acc: 0.9561
+    455/455 [==============================] - 0s 458us/step - loss: 0.0607 - acc: 0.9802 - val_loss: 0.1024 - val_acc: 0.9649
     Epoch 8/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0562 - acc: 0.9802 - val_loss: 0.0967 - val_acc: 0.9561
+    455/455 [==============================] - 0s 455us/step - loss: 0.0585 - acc: 0.9846 - val_loss: 0.0999 - val_acc: 0.9737
     Epoch 9/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0540 - acc: 0.9802 - val_loss: 0.1119 - val_acc: 0.9561
+    455/455 [==============================] - 0s 445us/step - loss: 0.0559 - acc: 0.9824 - val_loss: 0.0772 - val_acc: 0.9825
     Epoch 10/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0519 - acc: 0.9846 - val_loss: 0.0869 - val_acc: 0.9649
+    455/455 [==============================] - 0s 461us/step - loss: 0.0527 - acc: 0.9868 - val_loss: 0.0842 - val_acc: 0.9737
     Epoch 11/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0482 - acc: 0.9868 - val_loss: 0.0896 - val_acc: 0.9649
+    455/455 [==============================] - 0s 455us/step - loss: 0.0507 - acc: 0.9890 - val_loss: 0.0933 - val_acc: 0.9825
     Epoch 12/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0450 - acc: 0.9868 - val_loss: 0.0912 - val_acc: 0.9649
+    455/455 [==============================] - 0s 454us/step - loss: 0.0500 - acc: 0.9846 - val_loss: 0.0961 - val_acc: 0.9825
     Epoch 13/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0457 - acc: 0.9890 - val_loss: 0.1078 - val_acc: 0.9649
+    455/455 [==============================] - 0s 453us/step - loss: 0.0479 - acc: 0.9868 - val_loss: 0.1007 - val_acc: 0.9825
     Epoch 14/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0443 - acc: 0.9846 - val_loss: 0.0935 - val_acc: 0.9737
+    455/455 [==============================] - 0s 451us/step - loss: 0.0453 - acc: 0.9868 - val_loss: 0.0948 - val_acc: 0.9737
     Epoch 15/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0450 - acc: 0.9868 - val_loss: 0.0948 - val_acc: 0.9649
+    455/455 [==============================] - 0s 457us/step - loss: 0.0439 - acc: 0.9912 - val_loss: 0.0981 - val_acc: 0.9737
     Epoch 16/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0445 - acc: 0.9868 - val_loss: 0.1113 - val_acc: 0.9649
+    455/455 [==============================] - 0s 453us/step - loss: 0.0417 - acc: 0.9912 - val_loss: 0.0901 - val_acc: 0.9737
     Epoch 17/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0409 - acc: 0.9912 - val_loss: 0.1378 - val_acc: 0.9561
+    455/455 [==============================] - 0s 454us/step - loss: 0.0410 - acc: 0.9912 - val_loss: 0.0862 - val_acc: 0.9737
     Epoch 18/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0401 - acc: 0.9912 - val_loss: 0.0904 - val_acc: 0.9649
+    455/455 [==============================] - 0s 455us/step - loss: 0.0395 - acc: 0.9912 - val_loss: 0.1044 - val_acc: 0.9649
     Epoch 19/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0388 - acc: 0.9890 - val_loss: 0.1404 - val_acc: 0.9649
+    455/455 [==============================] - 0s 455us/step - loss: 0.0379 - acc: 0.9912 - val_loss: 0.1006 - val_acc: 0.9649
     Epoch 20/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0359 - acc: 0.9890 - val_loss: 0.0696 - val_acc: 0.9649
+    455/455 [==============================] - 0s 458us/step - loss: 0.0371 - acc: 0.9912 - val_loss: 0.1051 - val_acc: 0.9649
     Epoch 21/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0385 - acc: 0.9890 - val_loss: 0.0846 - val_acc: 0.9649
+    455/455 [==============================] - 0s 451us/step - loss: 0.0350 - acc: 0.9912 - val_loss: 0.0880 - val_acc: 0.9649
     Epoch 22/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0374 - acc: 0.9890 - val_loss: 0.1010 - val_acc: 0.9649
+    455/455 [==============================] - 0s 454us/step - loss: 0.0348 - acc: 0.9890 - val_loss: 0.1087 - val_acc: 0.9649
     Epoch 23/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0358 - acc: 0.9890 - val_loss: 0.0878 - val_acc: 0.9561
+    455/455 [==============================] - 0s 454us/step - loss: 0.0323 - acc: 0.9890 - val_loss: 0.1042 - val_acc: 0.9649
     Epoch 24/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0321 - acc: 0.9912 - val_loss: 0.1513 - val_acc: 0.9561
+    455/455 [==============================] - 0s 457us/step - loss: 0.0322 - acc: 0.9890 - val_loss: 0.1121 - val_acc: 0.9561
     Epoch 25/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.0324 - acc: 0.9890 - val_loss: 0.1006 - val_acc: 0.9649
+    455/455 [==============================] - 0s 450us/step - loss: 0.0317 - acc: 0.9912 - val_loss: 0.1029 - val_acc: 0.9561
 
 
 
@@ -845,11 +845,15 @@ visualize_training_results(results_2)
 ```
 
 
+    
 ![png](index_files/index_43_0.png)
+    
 
 
 
+    
 ![png](index_files/index_43_1.png)
+    
 
 
 ## What Happened?
@@ -887,7 +891,7 @@ model_3.add(Dense(1, activation='sigmoid'))
 
 ```python
 # __SOLUTION__ 
-model_3.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
+model_3.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['acc'])
 ```
 
 
@@ -901,57 +905,56 @@ results_3 = None
 results_3 = model_3.fit(data, labels, epochs=25, batch_size=1, validation_split=0.2)
 ```
 
-    Train on 455 samples, validate on 114 samples
     Epoch 1/25
-    455/455 [==============================] - 1s 3ms/step - loss: 1.2957 - acc: 0.4769 - val_loss: 0.6003 - val_acc: 0.7719
+    455/455 [==============================] - 0s 634us/step - loss: 0.7220 - acc: 0.5231 - val_loss: 0.6210 - val_acc: 0.7719
     Epoch 2/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6020 - val_acc: 0.7719
+    455/455 [==============================] - 0s 444us/step - loss: 0.6823 - acc: 0.5912 - val_loss: 0.5941 - val_acc: 0.7719
     Epoch 3/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6783 - acc: 0.5868 - val_loss: 0.5920 - val_acc: 0.7719
+    455/455 [==============================] - 0s 439us/step - loss: 0.6771 - acc: 0.5868 - val_loss: 0.6271 - val_acc: 0.7719
     Epoch 4/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6800 - acc: 0.5868 - val_loss: 0.6279 - val_acc: 0.7719
+    455/455 [==============================] - 0s 446us/step - loss: 0.6806 - acc: 0.5912 - val_loss: 0.6493 - val_acc: 0.7719
     Epoch 5/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6803 - acc: 0.5912 - val_loss: 0.6573 - val_acc: 0.7719
+    455/455 [==============================] - 0s 428us/step - loss: 0.6825 - acc: 0.5912 - val_loss: 0.6218 - val_acc: 0.7719
     Epoch 6/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6822 - acc: 0.5912 - val_loss: 0.6198 - val_acc: 0.7719
+    455/455 [==============================] - 0s 437us/step - loss: 0.6808 - acc: 0.5912 - val_loss: 0.6417 - val_acc: 0.7719
     Epoch 7/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6822 - acc: 0.5912 - val_loss: 0.6324 - val_acc: 0.7719
+    455/455 [==============================] - 0s 447us/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6200 - val_acc: 0.7719
     Epoch 8/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6818 - acc: 0.5824 - val_loss: 0.6062 - val_acc: 0.7719
+    455/455 [==============================] - 0s 438us/step - loss: 0.6798 - acc: 0.5846 - val_loss: 0.5830 - val_acc: 0.7719
     Epoch 9/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6183 - val_acc: 0.7719
+    455/455 [==============================] - 0s 426us/step - loss: 0.6816 - acc: 0.5912 - val_loss: 0.6384 - val_acc: 0.7719
     Epoch 10/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6808 - acc: 0.5912 - val_loss: 0.6209 - val_acc: 0.7719
+    455/455 [==============================] - 0s 438us/step - loss: 0.6792 - acc: 0.5890 - val_loss: 0.6976 - val_acc: 0.2281
     Epoch 11/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6819 - acc: 0.5912 - val_loss: 0.6094 - val_acc: 0.7719
+    455/455 [==============================] - 0s 439us/step - loss: 0.6818 - acc: 0.5846 - val_loss: 0.6627 - val_acc: 0.7719
     Epoch 12/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6809 - acc: 0.5868 - val_loss: 0.6151 - val_acc: 0.7719
+    455/455 [==============================] - 0s 435us/step - loss: 0.6808 - acc: 0.5846 - val_loss: 0.5749 - val_acc: 0.7719
     Epoch 13/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6813 - acc: 0.5912 - val_loss: 0.5801 - val_acc: 0.7719
+    455/455 [==============================] - 0s 440us/step - loss: 0.6804 - acc: 0.5912 - val_loss: 0.6090 - val_acc: 0.7719
     Epoch 14/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6808 - acc: 0.5912 - val_loss: 0.6598 - val_acc: 0.7719
+    455/455 [==============================] - 0s 435us/step - loss: 0.6815 - acc: 0.5912 - val_loss: 0.6233 - val_acc: 0.7719
     Epoch 15/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6808 - acc: 0.5780 - val_loss: 0.5975 - val_acc: 0.7719
+    455/455 [==============================] - 0s 455us/step - loss: 0.6828 - acc: 0.5912 - val_loss: 0.6109 - val_acc: 0.7719
     Epoch 16/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6800 - acc: 0.5868 - val_loss: 0.5805 - val_acc: 0.7719
+    455/455 [==============================] - 0s 442us/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6397 - val_acc: 0.7719
     Epoch 17/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6814 - acc: 0.5912 - val_loss: 0.6188 - val_acc: 0.7719
+    455/455 [==============================] - 0s 462us/step - loss: 0.6785 - acc: 0.5846 - val_loss: 0.5998 - val_acc: 0.7719
     Epoch 18/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6776 - acc: 0.5912 - val_loss: 0.6993 - val_acc: 0.2281
+    455/455 [==============================] - 0s 443us/step - loss: 0.6804 - acc: 0.5912 - val_loss: 0.5933 - val_acc: 0.7719
     Epoch 19/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6832 - acc: 0.5780 - val_loss: 0.6348 - val_acc: 0.7719
+    455/455 [==============================] - 0s 439us/step - loss: 0.6828 - acc: 0.5912 - val_loss: 0.6152 - val_acc: 0.7719
     Epoch 20/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6791 - acc: 0.5670 - val_loss: 0.5936 - val_acc: 0.7719
+    455/455 [==============================] - 0s 438us/step - loss: 0.6818 - acc: 0.5912 - val_loss: 0.5910 - val_acc: 0.7719
     Epoch 21/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6801 - acc: 0.5912 - val_loss: 0.6192 - val_acc: 0.7719
+    455/455 [==============================] - 0s 440us/step - loss: 0.6827 - acc: 0.5912 - val_loss: 0.5899 - val_acc: 0.7719
     Epoch 22/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6822 - acc: 0.5912 - val_loss: 0.6238 - val_acc: 0.7719
+    455/455 [==============================] - 0s 435us/step - loss: 0.6810 - acc: 0.5912 - val_loss: 0.6224 - val_acc: 0.7719
     Epoch 23/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6813 - acc: 0.5912 - val_loss: 0.5817 - val_acc: 0.7719
+    455/455 [==============================] - 0s 434us/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6152 - val_acc: 0.7719
     Epoch 24/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6828 - acc: 0.5912 - val_loss: 0.6002 - val_acc: 0.7719
+    455/455 [==============================] - 0s 440us/step - loss: 0.6798 - acc: 0.5912 - val_loss: 0.6156 - val_acc: 0.7719
     Epoch 25/25
-    455/455 [==============================] - 1s 3ms/step - loss: 0.6798 - acc: 0.5802 - val_loss: 0.5994 - val_acc: 0.7719
+    455/455 [==============================] - 0s 439us/step - loss: 0.6817 - acc: 0.5912 - val_loss: 0.6343 - val_acc: 0.7719
 
 
 
@@ -966,11 +969,15 @@ visualize_training_results(results_3)
 ```
 
 
+    
 ![png](index_files/index_52_0.png)
+    
 
 
 
+    
 ![png](index_files/index_52_1.png)
+    
 
 
 Wow! Our results were much worse -- over 20% poorer performance when working with non-normalized input data!  
