@@ -495,7 +495,7 @@ In the cell below:
 
 ```python
 model_1 = Sequential()
-model_1.add(Dense(5, activation='tanh', input_shape=(30,)))
+model_1.add(Dense(10, activation='tanh', input_shape=(30,)))
 model_1.add(Dense(1, activation='sigmoid'))
 ```
 
@@ -528,66 +528,55 @@ results_1 = model_1.fit(scaled_data, labels, epochs=25, batch_size=1, validation
 ```
 
     Epoch 1/25
-
-
-    2023-04-13 14:54:05.258286: W tensorflow/core/platform/profile_utils/cpu_utils.cc:128] Failed to get CPU frequency: 0 Hz
-    2023-04-13 14:54:05.404312: I tensorflow/core/grappler/optimizers/custom_graph_optimizer_registry.cc:113] Plugin optimizer for device_type GPU is enabled.
-
-
-    454/455 [============================>.] - ETA: 0s - loss: 0.2360 - acc: 0.9163
-
-    2023-04-13 14:54:08.733420: I tensorflow/core/grappler/optimizers/custom_graph_optimizer_registry.cc:113] Plugin optimizer for device_type GPU is enabled.
-
-
-    455/455 [==============================] - 4s 5ms/step - loss: 0.2359 - acc: 0.9165 - val_loss: 0.1413 - val_acc: 0.9737
+    455/455 [==============================] - 0s 661us/step - loss: 0.2576 - acc: 0.9275 - val_loss: 0.2038 - val_acc: 0.9298
     Epoch 2/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.1044 - acc: 0.9736 - val_loss: 0.1115 - val_acc: 0.9825
+    455/455 [==============================] - 0s 459us/step - loss: 0.1198 - acc: 0.9692 - val_loss: 0.1543 - val_acc: 0.9298
     Epoch 3/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0853 - acc: 0.9780 - val_loss: 0.1065 - val_acc: 0.9649
+    455/455 [==============================] - 0s 438us/step - loss: 0.0925 - acc: 0.9692 - val_loss: 0.1336 - val_acc: 0.9386
     Epoch 4/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.0762 - acc: 0.9780 - val_loss: 0.1067 - val_acc: 0.9649
+    455/455 [==============================] - 0s 436us/step - loss: 0.0811 - acc: 0.9758 - val_loss: 0.1254 - val_acc: 0.9386
     Epoch 5/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.0706 - acc: 0.9758 - val_loss: 0.1009 - val_acc: 0.9649
+    455/455 [==============================] - 0s 429us/step - loss: 0.0739 - acc: 0.9758 - val_loss: 0.1128 - val_acc: 0.9561
     Epoch 6/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.0670 - acc: 0.9780 - val_loss: 0.0969 - val_acc: 0.9649
+    455/455 [==============================] - 0s 430us/step - loss: 0.0698 - acc: 0.9780 - val_loss: 0.1128 - val_acc: 0.9561
     Epoch 7/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0642 - acc: 0.9802 - val_loss: 0.0910 - val_acc: 0.9649
+    455/455 [==============================] - 0s 431us/step - loss: 0.0664 - acc: 0.9780 - val_loss: 0.1118 - val_acc: 0.9561
     Epoch 8/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0622 - acc: 0.9824 - val_loss: 0.0933 - val_acc: 0.9649
+    455/455 [==============================] - 0s 443us/step - loss: 0.0635 - acc: 0.9758 - val_loss: 0.1032 - val_acc: 0.9649
     Epoch 9/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0598 - acc: 0.9824 - val_loss: 0.0917 - val_acc: 0.9649
+    455/455 [==============================] - 0s 439us/step - loss: 0.0618 - acc: 0.9802 - val_loss: 0.1032 - val_acc: 0.9561
     Epoch 10/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0586 - acc: 0.9868 - val_loss: 0.0901 - val_acc: 0.9649
+    455/455 [==============================] - 0s 436us/step - loss: 0.0598 - acc: 0.9780 - val_loss: 0.0976 - val_acc: 0.9649
     Epoch 11/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0575 - acc: 0.9824 - val_loss: 0.0895 - val_acc: 0.9737
+    455/455 [==============================] - 0s 428us/step - loss: 0.0583 - acc: 0.9780 - val_loss: 0.0988 - val_acc: 0.9561
     Epoch 12/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0561 - acc: 0.9846 - val_loss: 0.0880 - val_acc: 0.9825
+    455/455 [==============================] - 0s 429us/step - loss: 0.0567 - acc: 0.9802 - val_loss: 0.1027 - val_acc: 0.9561
     Epoch 13/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0549 - acc: 0.9846 - val_loss: 0.0921 - val_acc: 0.9649
+    455/455 [==============================] - 0s 414us/step - loss: 0.0554 - acc: 0.9802 - val_loss: 0.1018 - val_acc: 0.9561
     Epoch 14/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0543 - acc: 0.9868 - val_loss: 0.0885 - val_acc: 0.9825
+    455/455 [==============================] - 0s 425us/step - loss: 0.0537 - acc: 0.9824 - val_loss: 0.0952 - val_acc: 0.9649
     Epoch 15/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0534 - acc: 0.9846 - val_loss: 0.0930 - val_acc: 0.9737
+    455/455 [==============================] - 0s 430us/step - loss: 0.0525 - acc: 0.9824 - val_loss: 0.0947 - val_acc: 0.9649
     Epoch 16/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0528 - acc: 0.9846 - val_loss: 0.0943 - val_acc: 0.9649
+    455/455 [==============================] - 0s 428us/step - loss: 0.0515 - acc: 0.9802 - val_loss: 0.0955 - val_acc: 0.9649
     Epoch 17/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0521 - acc: 0.9868 - val_loss: 0.0889 - val_acc: 0.9825
+    455/455 [==============================] - 0s 414us/step - loss: 0.0499 - acc: 0.9802 - val_loss: 0.1032 - val_acc: 0.9561
     Epoch 18/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0509 - acc: 0.9868 - val_loss: 0.0917 - val_acc: 0.9737
+    455/455 [==============================] - 0s 428us/step - loss: 0.0487 - acc: 0.9802 - val_loss: 0.0979 - val_acc: 0.9649
     Epoch 19/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0509 - acc: 0.9868 - val_loss: 0.0865 - val_acc: 0.9825
+    455/455 [==============================] - 0s 441us/step - loss: 0.0469 - acc: 0.9824 - val_loss: 0.0928 - val_acc: 0.9737
     Epoch 20/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0503 - acc: 0.9846 - val_loss: 0.0902 - val_acc: 0.9825
+    455/455 [==============================] - 0s 414us/step - loss: 0.0471 - acc: 0.9802 - val_loss: 0.0964 - val_acc: 0.9649
     Epoch 21/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0497 - acc: 0.9868 - val_loss: 0.0887 - val_acc: 0.9825
+    455/455 [==============================] - 0s 434us/step - loss: 0.0455 - acc: 0.9802 - val_loss: 0.0943 - val_acc: 0.9649
     Epoch 22/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.0489 - acc: 0.9846 - val_loss: 0.0933 - val_acc: 0.9825
+    455/455 [==============================] - 0s 439us/step - loss: 0.0453 - acc: 0.9846 - val_loss: 0.0964 - val_acc: 0.9649
     Epoch 23/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0485 - acc: 0.9846 - val_loss: 0.0981 - val_acc: 0.9737
+    455/455 [==============================] - 0s 432us/step - loss: 0.0440 - acc: 0.9846 - val_loss: 0.0948 - val_acc: 0.9561
     Epoch 24/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.0485 - acc: 0.9868 - val_loss: 0.0936 - val_acc: 0.9825
+    455/455 [==============================] - 0s 430us/step - loss: 0.0432 - acc: 0.9846 - val_loss: 0.0948 - val_acc: 0.9561
     Epoch 25/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0472 - acc: 0.9846 - val_loss: 0.0840 - val_acc: 0.9825
+    455/455 [==============================] - 0s 428us/step - loss: 0.0427 - acc: 0.9868 - val_loss: 0.1025 - val_acc: 0.9561
 
 
 Note that when you call a Keras model's `.fit()` method, it returns a Keras callback containing information on the training process of the model. If you examine the callback's `.history` attribute, you'll find a dictionary containing both the training and validation loss, as well as any metrics we specified when compiling the model (in this case, just accuracy). 
@@ -669,65 +658,55 @@ results_2 = model_2.fit(scaled_data, labels, epochs=25, batch_size=1, validation
 ```
 
     Epoch 1/25
-
-
-    2023-04-13 14:55:42.373904: I tensorflow/core/grappler/optimizers/custom_graph_optimizer_registry.cc:113] Plugin optimizer for device_type GPU is enabled.
-
-
-    446/455 [============================>.] - ETA: 0s - loss: 0.1787 - acc: 0.9619
-
-    2023-04-13 14:55:44.583693: I tensorflow/core/grappler/optimizers/custom_graph_optimizer_registry.cc:113] Plugin optimizer for device_type GPU is enabled.
-
-
-    455/455 [==============================] - 3s 5ms/step - loss: 0.1801 - acc: 0.9604 - val_loss: 0.1260 - val_acc: 0.9737
+    455/455 [==============================] - 0s 616us/step - loss: 0.2577 - acc: 0.9275 - val_loss: 0.1680 - val_acc: 0.9561
     Epoch 2/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0952 - acc: 0.9780 - val_loss: 0.0893 - val_acc: 0.9912
+    455/455 [==============================] - 0s 453us/step - loss: 0.1120 - acc: 0.9758 - val_loss: 0.1281 - val_acc: 0.9737
     Epoch 3/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0823 - acc: 0.9780 - val_loss: 0.0765 - val_acc: 0.9912
+    455/455 [==============================] - 0s 460us/step - loss: 0.0854 - acc: 0.9824 - val_loss: 0.1113 - val_acc: 0.9649
     Epoch 4/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0720 - acc: 0.9780 - val_loss: 0.0758 - val_acc: 0.9912
+    455/455 [==============================] - 0s 451us/step - loss: 0.0760 - acc: 0.9780 - val_loss: 0.0990 - val_acc: 0.9737
     Epoch 5/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0667 - acc: 0.9824 - val_loss: 0.0741 - val_acc: 0.9825
+    455/455 [==============================] - 0s 449us/step - loss: 0.0688 - acc: 0.9824 - val_loss: 0.1006 - val_acc: 0.9737
     Epoch 6/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0620 - acc: 0.9824 - val_loss: 0.0745 - val_acc: 0.9912
+    455/455 [==============================] - 0s 452us/step - loss: 0.0651 - acc: 0.9802 - val_loss: 0.0909 - val_acc: 0.9737
     Epoch 7/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0589 - acc: 0.9846 - val_loss: 0.0822 - val_acc: 0.9737
+    455/455 [==============================] - 0s 458us/step - loss: 0.0607 - acc: 0.9802 - val_loss: 0.1024 - val_acc: 0.9649
     Epoch 8/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0566 - acc: 0.9846 - val_loss: 0.0753 - val_acc: 0.9737
+    455/455 [==============================] - 0s 455us/step - loss: 0.0585 - acc: 0.9846 - val_loss: 0.0999 - val_acc: 0.9737
     Epoch 9/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0531 - acc: 0.9846 - val_loss: 0.0785 - val_acc: 0.9737
+    455/455 [==============================] - 0s 445us/step - loss: 0.0559 - acc: 0.9824 - val_loss: 0.0772 - val_acc: 0.9825
     Epoch 10/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0521 - acc: 0.9868 - val_loss: 0.0934 - val_acc: 0.9737
+    455/455 [==============================] - 0s 461us/step - loss: 0.0527 - acc: 0.9868 - val_loss: 0.0842 - val_acc: 0.9737
     Epoch 11/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0513 - acc: 0.9868 - val_loss: 0.0707 - val_acc: 0.9825
+    455/455 [==============================] - 0s 455us/step - loss: 0.0507 - acc: 0.9890 - val_loss: 0.0933 - val_acc: 0.9825
     Epoch 12/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0490 - acc: 0.9868 - val_loss: 0.0646 - val_acc: 0.9825
+    455/455 [==============================] - 0s 454us/step - loss: 0.0500 - acc: 0.9846 - val_loss: 0.0961 - val_acc: 0.9825
     Epoch 13/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0472 - acc: 0.9846 - val_loss: 0.0636 - val_acc: 0.9825
+    455/455 [==============================] - 0s 453us/step - loss: 0.0479 - acc: 0.9868 - val_loss: 0.1007 - val_acc: 0.9825
     Epoch 14/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0458 - acc: 0.9868 - val_loss: 0.0679 - val_acc: 0.9825
+    455/455 [==============================] - 0s 451us/step - loss: 0.0453 - acc: 0.9868 - val_loss: 0.0948 - val_acc: 0.9737
     Epoch 15/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0447 - acc: 0.9846 - val_loss: 0.0801 - val_acc: 0.9737
+    455/455 [==============================] - 0s 457us/step - loss: 0.0439 - acc: 0.9912 - val_loss: 0.0981 - val_acc: 0.9737
     Epoch 16/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0451 - acc: 0.9868 - val_loss: 0.0764 - val_acc: 0.9825
+    455/455 [==============================] - 0s 453us/step - loss: 0.0417 - acc: 0.9912 - val_loss: 0.0901 - val_acc: 0.9737
     Epoch 17/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0428 - acc: 0.9868 - val_loss: 0.0608 - val_acc: 0.9825
+    455/455 [==============================] - 0s 454us/step - loss: 0.0410 - acc: 0.9912 - val_loss: 0.0862 - val_acc: 0.9737
     Epoch 18/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0421 - acc: 0.9868 - val_loss: 0.0596 - val_acc: 0.9825
+    455/455 [==============================] - 0s 455us/step - loss: 0.0395 - acc: 0.9912 - val_loss: 0.1044 - val_acc: 0.9649
     Epoch 19/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0389 - acc: 0.9912 - val_loss: 0.0977 - val_acc: 0.9649
+    455/455 [==============================] - 0s 455us/step - loss: 0.0379 - acc: 0.9912 - val_loss: 0.1006 - val_acc: 0.9649
     Epoch 20/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0412 - acc: 0.9890 - val_loss: 0.0712 - val_acc: 0.9737
+    455/455 [==============================] - 0s 458us/step - loss: 0.0371 - acc: 0.9912 - val_loss: 0.1051 - val_acc: 0.9649
     Epoch 21/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0384 - acc: 0.9890 - val_loss: 0.0611 - val_acc: 0.9825
+    455/455 [==============================] - 0s 451us/step - loss: 0.0350 - acc: 0.9912 - val_loss: 0.0880 - val_acc: 0.9649
     Epoch 22/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0379 - acc: 0.9912 - val_loss: 0.0700 - val_acc: 0.9737
+    455/455 [==============================] - 0s 454us/step - loss: 0.0348 - acc: 0.9890 - val_loss: 0.1087 - val_acc: 0.9649
     Epoch 23/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0371 - acc: 0.9912 - val_loss: 0.0848 - val_acc: 0.9737
+    455/455 [==============================] - 0s 454us/step - loss: 0.0323 - acc: 0.9890 - val_loss: 0.1042 - val_acc: 0.9649
     Epoch 24/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0360 - acc: 0.9890 - val_loss: 0.0543 - val_acc: 0.9825
+    455/455 [==============================] - 0s 457us/step - loss: 0.0322 - acc: 0.9890 - val_loss: 0.1121 - val_acc: 0.9561
     Epoch 25/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.0359 - acc: 0.9890 - val_loss: 0.0587 - val_acc: 0.9737
+    455/455 [==============================] - 0s 450us/step - loss: 0.0317 - acc: 0.9912 - val_loss: 0.1029 - val_acc: 0.9561
 
 
 
@@ -778,65 +757,55 @@ results_3 = model_3.fit(data, labels, epochs=25, batch_size=1, validation_split=
 ```
 
     Epoch 1/25
-     25/455 [>.............................] - ETA: 1s - loss: 0.6779 - acc: 0.3600     
-
-    2023-04-13 14:56:53.213038: I tensorflow/core/grappler/optimizers/custom_graph_optimizer_registry.cc:113] Plugin optimizer for device_type GPU is enabled.
-
-
-    447/455 [============================>.] - ETA: 0s - loss: 0.6838 - acc: 0.5749
-
-    2023-04-13 14:56:55.112294: I tensorflow/core/grappler/optimizers/custom_graph_optimizer_registry.cc:113] Plugin optimizer for device_type GPU is enabled.
-
-
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6846 - acc: 0.5736 - val_loss: 0.5950 - val_acc: 0.7719
+    455/455 [==============================] - 0s 634us/step - loss: 0.7220 - acc: 0.5231 - val_loss: 0.6210 - val_acc: 0.7719
     Epoch 2/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6771 - acc: 0.5692 - val_loss: 0.6188 - val_acc: 0.7719
+    455/455 [==============================] - 0s 444us/step - loss: 0.6823 - acc: 0.5912 - val_loss: 0.5941 - val_acc: 0.7719
     Epoch 3/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6825 - acc: 0.5912 - val_loss: 0.6083 - val_acc: 0.7719
+    455/455 [==============================] - 0s 439us/step - loss: 0.6771 - acc: 0.5868 - val_loss: 0.6271 - val_acc: 0.7719
     Epoch 4/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6784 - acc: 0.5868 - val_loss: 0.6331 - val_acc: 0.7719
+    455/455 [==============================] - 0s 446us/step - loss: 0.6806 - acc: 0.5912 - val_loss: 0.6493 - val_acc: 0.7719
     Epoch 5/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6754 - acc: 0.5978 - val_loss: 0.5620 - val_acc: 0.7719
+    455/455 [==============================] - 0s 428us/step - loss: 0.6825 - acc: 0.5912 - val_loss: 0.6218 - val_acc: 0.7719
     Epoch 6/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6834 - acc: 0.5912 - val_loss: 0.5859 - val_acc: 0.7719
+    455/455 [==============================] - 0s 437us/step - loss: 0.6808 - acc: 0.5912 - val_loss: 0.6417 - val_acc: 0.7719
     Epoch 7/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6822 - acc: 0.5912 - val_loss: 0.6254 - val_acc: 0.7719
+    455/455 [==============================] - 0s 447us/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6200 - val_acc: 0.7719
     Epoch 8/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6819 - acc: 0.5912 - val_loss: 0.6346 - val_acc: 0.7719
+    455/455 [==============================] - 0s 438us/step - loss: 0.6798 - acc: 0.5846 - val_loss: 0.5830 - val_acc: 0.7719
     Epoch 9/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6825 - acc: 0.5912 - val_loss: 0.6281 - val_acc: 0.7719
+    455/455 [==============================] - 0s 426us/step - loss: 0.6816 - acc: 0.5912 - val_loss: 0.6384 - val_acc: 0.7719
     Epoch 10/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.5897 - val_acc: 0.7719
+    455/455 [==============================] - 0s 438us/step - loss: 0.6792 - acc: 0.5890 - val_loss: 0.6976 - val_acc: 0.2281
     Epoch 11/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6799 - acc: 0.5912 - val_loss: 0.6489 - val_acc: 0.7719
+    455/455 [==============================] - 0s 439us/step - loss: 0.6818 - acc: 0.5846 - val_loss: 0.6627 - val_acc: 0.7719
     Epoch 12/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6803 - acc: 0.5890 - val_loss: 0.5704 - val_acc: 0.7719
+    455/455 [==============================] - 0s 435us/step - loss: 0.6808 - acc: 0.5846 - val_loss: 0.5749 - val_acc: 0.7719
     Epoch 13/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6831 - acc: 0.5912 - val_loss: 0.5954 - val_acc: 0.7719
+    455/455 [==============================] - 0s 440us/step - loss: 0.6804 - acc: 0.5912 - val_loss: 0.6090 - val_acc: 0.7719
     Epoch 14/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6808 - acc: 0.5912 - val_loss: 0.5888 - val_acc: 0.7719
+    455/455 [==============================] - 0s 435us/step - loss: 0.6815 - acc: 0.5912 - val_loss: 0.6233 - val_acc: 0.7719
     Epoch 15/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6795 - acc: 0.5912 - val_loss: 0.5837 - val_acc: 0.7719
+    455/455 [==============================] - 0s 455us/step - loss: 0.6828 - acc: 0.5912 - val_loss: 0.6109 - val_acc: 0.7719
     Epoch 16/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6820 - acc: 0.5912 - val_loss: 0.6451 - val_acc: 0.7719
+    455/455 [==============================] - 0s 442us/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6397 - val_acc: 0.7719
     Epoch 17/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6820 - acc: 0.5912 - val_loss: 0.6011 - val_acc: 0.7719
+    455/455 [==============================] - 0s 462us/step - loss: 0.6785 - acc: 0.5846 - val_loss: 0.5998 - val_acc: 0.7719
     Epoch 18/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6806 - acc: 0.5912 - val_loss: 0.6690 - val_acc: 0.7719
+    455/455 [==============================] - 0s 443us/step - loss: 0.6804 - acc: 0.5912 - val_loss: 0.5933 - val_acc: 0.7719
     Epoch 19/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6816 - acc: 0.5846 - val_loss: 0.6148 - val_acc: 0.7719
+    455/455 [==============================] - 0s 439us/step - loss: 0.6828 - acc: 0.5912 - val_loss: 0.6152 - val_acc: 0.7719
     Epoch 20/25
-    455/455 [==============================] - 2s 5ms/step - loss: 0.6816 - acc: 0.5912 - val_loss: 0.5894 - val_acc: 0.7719
+    455/455 [==============================] - 0s 438us/step - loss: 0.6818 - acc: 0.5912 - val_loss: 0.5910 - val_acc: 0.7719
     Epoch 21/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6824 - acc: 0.5912 - val_loss: 0.6123 - val_acc: 0.7719
+    455/455 [==============================] - 0s 440us/step - loss: 0.6827 - acc: 0.5912 - val_loss: 0.5899 - val_acc: 0.7719
     Epoch 22/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6801 - acc: 0.5868 - val_loss: 0.6058 - val_acc: 0.7719
+    455/455 [==============================] - 0s 435us/step - loss: 0.6810 - acc: 0.5912 - val_loss: 0.6224 - val_acc: 0.7719
     Epoch 23/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6784 - acc: 0.5846 - val_loss: 0.6891 - val_acc: 0.7719
+    455/455 [==============================] - 0s 434us/step - loss: 0.6821 - acc: 0.5912 - val_loss: 0.6152 - val_acc: 0.7719
     Epoch 24/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6822 - acc: 0.5824 - val_loss: 0.5800 - val_acc: 0.7719
+    455/455 [==============================] - 0s 440us/step - loss: 0.6798 - acc: 0.5912 - val_loss: 0.6156 - val_acc: 0.7719
     Epoch 25/25
-    455/455 [==============================] - 2s 4ms/step - loss: 0.6789 - acc: 0.5846 - val_loss: 0.5737 - val_acc: 0.7719
+    455/455 [==============================] - 0s 439us/step - loss: 0.6817 - acc: 0.5912 - val_loss: 0.6343 - val_acc: 0.7719
 
 
 
