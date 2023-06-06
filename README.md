@@ -558,7 +558,7 @@ model_1 = None
 ```python
 # __SOLUTION__ 
 model_1 = Sequential()
-model_1.add(Dense(5, activation='tanh', input_shape=(30,)))
+model_1.add(Dense(10, activation='tanh', input_shape=(30,)))
 model_1.add(Dense(1, activation='sigmoid'))
 ```
 
